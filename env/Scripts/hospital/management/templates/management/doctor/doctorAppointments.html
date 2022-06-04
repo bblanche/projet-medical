@@ -1,0 +1,96 @@
+{% extends "management/doctor/base_doctor.html" %} 
+{% load static %} 
+
+
+{% block body %}
+<section class="content" style="min-height: 700px;">
+    <div class="container-fluid">
+        <div class="block-header">
+            <h2>{{doctor.first_name}}'s Appointments {{doctor.department}}</h2>
+            
+        </div>
+
+        <form style="text-align: center;" action="{% url 'management:doctorAppointments' %}" method="POST">
+            {% csrf_token %}
+            <label for="">Name</label>
+            <input name='name' type="text" value="{{selectName}}">
+            <button>🔍</button>
+            <br>
+        </form>
+
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                   
+                    <div class="header">
+                        <ul class="header-dropdown">
+                            <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="zmdi zmdi-more-vert"></i></a>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a href="javascript:void(0);">Action</a></li>
+                                    <li><a href="javascript:void(0);">Another action</a></li>
+                                    <li><a href="javascript:void(0);">Something else here</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="body">
+                        
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>DOCTOR</th>
+                                        <th>RECEPTIONIST</th>
+                                        <th>PATIENT</th>
+                                        <th>DATE</th>
+                                        <th>HOUR</th>
+                                        <th>STATE</th>
+                                        <th>ACTION</th>
+                                        
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for appointment in appointments %}
+                                    
+                                    <tr>
+                                        <td></td>
+                                        <td class="txt-oflo"><span style="text-transform: uppercase;">{{appointment.doctor.first_name}} {{appointment.doctor.last_name}}</span></td>
+                                        <td class="txt-oflo"><span style="text-transform: uppercase;">{{appointment.service_receptionist.first_name}} {{appointment.service_receptionist.last_name}}</span></td>
+                                        <td><a href="{{ appointment.patient.get_absolute_url5 }}" style="text-transform: uppercase; color: black;">{{appointment.patient.first_name}} {{appointment.patient.last_name}}</a> </td>
+                                        <td class="txt-oflo">{{appointment.date_appointment}}</td>
+                                        <td class="txt-oflo">{{appointment.hour_appointment}}</td>
+                                        {% if appointment.state == "Not consulted" %}
+                                        <td class="txt-oflo"><span class="is_not_active_bg">{{appointment.state}}</span></td>
+                                        <td class="txt-oflo"><a href="{{appointment.get_absolute_url8}}"><button class="btn btn-raised g-bg-cyan" style="width:100%; text-align: center;">Consult</button></a></td>
+                                        {% else %}
+                                        <td class="txt-oflo">{{appointment.state}}</td>
+                                        {% endif %}
+                                    </tr>
+                                    
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <!-- <a href="javascript:void(0);">Check all the sales</a> -->
+                        </div>
+
+                        {% if paginate %}
+                                        
+                        {% if appointments.has_previous %}
+                            <a href="?page={{ appointments.previous_page_number }}">Previous</a>
+                        {% endif %}
+                        {% if appointments.has_next %}
+                            <a href="?page={{ appointments.next_page_number }}" style="float: right;">Next</a>
+                        {% endif %}
+                    
+                        {% endif %}
+                        
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </div>
+    
+</section>   
+        {% endblock %}

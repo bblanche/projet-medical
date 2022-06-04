@@ -1,0 +1,94 @@
+﻿{% extends "management/serviceReceptionist/base.html" %} 
+{% load static %} 
+
+{% block body %}
+
+<section class="content home" style="min-height: 700px;">
+    <div class="container-fluid">
+        <div class="block-header">
+            
+           
+            <h2>Book Appointment</h2>
+            
+        </div>
+        <div class="row clearfix">
+			<div class="col-lg-12 col-md-12 col-sm-12 ">
+				<div class="card">
+					<div class="header">
+						
+						<ul class="header-dropdown m-r--5">
+							<li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="zmdi zmdi-more-vert"></i></a>
+								<ul class="dropdown-menu pull-right">
+									<li><a href="javascript:void(0);" class=" waves-effect waves-block">Action</a></li>
+									<li><a href="javascript:void(0);" class=" waves-effect waves-block">Another action</a></li>
+									<li><a href="javascript:void(0);" class=" waves-effect waves-block">Something else here</a></li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+					<div class="body">
+                        <br /><br /><br /><br />
+                        <form method="post" action="{% url 'management:appointment' %}">
+                            {% csrf_token %}
+                        <div class="row clearfix">
+                           
+                            <div class="col-sm-6 ">
+                                <div class="form-group">
+                                    <div class="form-line"><strong>Date</strong>
+                                        <input type="date" name="date" class="datetimepicker form-control" value="{{current_date}}" min="{{current_date}}" max="{{max_date}}" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 "><br>
+                                <div class="form-group"><strong>Hour</strong>
+                                    <div class="form-line">
+                                        <input type="time" id="hour" name="hour" min="07:00" max="18:00" placeholder="hh:mm" required>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br /><br />
+                        <div class="row clearfix">
+                        
+                        <div class="col-sm-6">
+                            <div class="form-group drop-custum"><strong>Doctor</strong>
+                                <select name="doctor" class="form-control show-tick" required>
+                                    <option value="">-- Doctor --</option>
+                                    {%for doctor in doctors%}
+                                    <option value={{doctor.pk}}>{{doctor.first_name}} {{doctor.last_name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group drop-custum"><strong>Patient</strong>
+                                <select name="patient" class="form-control show-tick" required>
+                                    <option value="">-- Patient --</option>
+                                    {%for patient in patients%}
+                                        {% if patient.patient.has_paid %}
+                                        
+                                        
+                                        <option value={{patient.patient.pk}}>{{patient.patient.first_name}} {{patient.patient.last_name}}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                            
+                            <div class="col-sm-12" style="text-align: center;">
+                                <button type="submit" class="btn btn-raised g-bg-cyan">Submit</button>    
+                            </div>
+                        </div>
+                       </form>
+                    </div>
+				</div>
+			</div>
+		</div>
+    </div>
+    
+            
+</section>
+
+{% endblock %}

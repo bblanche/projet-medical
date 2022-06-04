@@ -1,0 +1,45 @@
+
+
+
+{% extends "management/cashier/base_cashier.html" %} 
+
+
+{% load static %} 
+
+{% block body %}
+<section class="content home" style="min-height: 700px;">
+    
+    <div class="container-fluid">
+        <div class="block-header">
+            <h4 class="mb-0"><strong>Welcome {{cashier.first_name}} {{cashier.last_name}}</strong></h4>
+            <small class="text-muted">Welcome to POLYCLINIC application</small>
+        </div>
+        
+            <div class="col-lg-12 col-md-12 col-sm-12" >
+                <div class="info-box-12 hover-zoom-effect" style="text-align: center; min-height: 300px;">
+                    
+                    <div class="content">
+                        <div class="text"><span style="color: rgba(20, 156, 247, 0.904); font-size: 300%; text-align: center;"> All Principal Receptionists</span></div>
+                        <div class="number"><span style="color: rgba(20, 156, 247, 0.904); font-size: 300%; text-align: center;">{{principalReceptionistCount}}</span></div>
+                    </div>
+                </div>
+            </div>
+            <br><br><br><br>
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="info-box-12 hover-zoom-effect" style="text-align: center; min-height: 300px;">
+                    
+                    <div class="content">
+                        <div class="text"><span style="color: rgba(20, 156, 247, 0.904); font-size: 300%; text-align: center;">All Patients</span></div>
+                        <div class="number"><span style="color: rgba(20, 156, 247, 0.904); font-size: 300%; text-align: center;">{{patientCount}}</span></div>
+                    </div>
+                </div>
+            </div>
+            
+            
+           
+        </div>
+	</div>
+</section>
+
+{% endblock %}
+

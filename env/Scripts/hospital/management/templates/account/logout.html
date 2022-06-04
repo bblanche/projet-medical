@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from thememakker.com/templates/swift/hospital/ by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 07 Jun 2021 19:07:45 GMT -->
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<title>:: POLYCLINIC - Hospital Admin ::</title>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="stylesheet" href="{% static 'management/plugins/bootstrap/css/bootstrap.min.css' %}"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" type="text/css">
+<link rel="stylesheet" href="{% static 'management/plugins/morrisjs/morris.css' %}"/>
+<link rel="stylesheet" href="{% static 'management/css/main.css' %}"/>
+<style>
+        .slideshow {
+        
+            height: 100%; 
+            width: 100%;
+        
+        overflow: hidden;
+        
+        border: 3px solid #F2F2F2;
+        
+        }
+        
+        .slideshow ul {
+        
+            /* 3 images donc 4 x 100% */
+        
+            height: 100%; 
+            width: 100%;
+        
+        padding:0; margin:0;
+        
+        list-style: none;
+        
+        }
+        
+        .slideshow li {
+        
+        float: left;
+        
+        }
+    </style>
+    
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+    
+    <script type="text/javascript">
+    
+       $(function(){
+    
+          setInterval(function(){
+    
+             $(".slideshow ul").animate({marginLeft:-1300},0,function(){
+    
+                $(this).css({marginLeft:0}).find("li:last").after($(this).find("li:first"));
+    
+             })
+    
+          }, 5000);
+    
+       });
+    
+    </script>
+</head>
+
+<body class="theme-cyan">
+
+<nav class="navbar clearHeader">   
+    <div class="col-12">
+        <div class="navbar-header"> <a href="javascript:void(0);" class="bars"></a> <a class="navbar-brand" href="/">POLYCLINIC</a> </div>
+        <h1  style="text-align: center; font-size: 400%; max-height: 180px; font-family: l; text-shadow: 4px 3px 0px #fff, 9px 8px 0px rgba(0,0,0,0.15);">WELCOME TO POLYCLINIC APPLICATION</h1>
+
+    </div>
+    
+</nav>
+
+<br /><br /><br /><br /><br /><br /><br /><br /><br />
+<div>
+  <section style=" background-color: aliceblue ; border: 4px solid rgb(17, 167, 226);" >
+    <br /><br /><br /><br /><br />
+    
+      <br /><br /><br /><br /><br /><br />
+      <h2 style="text-align: center;">Sign Out</h2>
+  
+      <p style="text-align: center;">Are you sure you want to sign out?</p>
+  
+      <form method="post" action="{% url 'account_logout' %}" style="text-align: center;">
+        {% csrf_token %}
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+        {% endif %}
+        <button class="btn btn-primary" type="submit" >Sign Out</button>
+      </form>
+      <br /><br /><br /><br /><br /><br />
+    
+     
+    
+    
+  </section>
+  </div>
+  
+
+
+<div class="color-bg"></div>
+<script src="{% static 'management/bundles/libscripts.bundle.js' %}"></script> 
+<script src="{% static 'management/bundles/vendorscripts.bundle.js' %}"></script> 
+
+<script src="{% static 'management/bundles/chartscripts.bundle.js' %}"></script> 
+<script src="{% static 'management/bundles/sparklinescripts.bundle.js' %}"></script> 
+
+<script src="{% static 'management/bundles/mainscripts.bundle.js' %}"></script>
+<script src="{% static 'management/js/pages/index.js' %}"></script>
+<script src="{% static 'management/js/pages/charts/sparkline.min.js' %}"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

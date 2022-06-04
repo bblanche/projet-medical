@@ -1,0 +1,191 @@
+{% extends "management/doctor/base_doctor.html" %} 
+{% load static %} 
+
+{% block body %}
+
+<section class="content profile-page" style="min-height: 700px;">
+    <div class="container-fluid">
+        <div class="block-header">
+            <h2>RECEIPT</h2>
+        </div>        
+        <div class="row clearfix">
+            <div class="row clearfix">
+                <div class="col-lg-4 col-md-12 col-sm-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2><strong>ABOUT PATIENT</strong></h2>
+                        </div>
+                        <div class="body">
+                            <strong>Name</strong>
+                            <p style="text-transform: uppercase;">{{patient.first_name}} {{patient.last_name}}</p>
+                            <hr>
+                            <strong>date of birth</strong>
+                            <p>{{patient.date_of_birth}}</p>
+                            <hr>
+                            <strong>Gender</strong>
+                            <p>{{patient.gender}}</p>
+                            <hr>
+                            <strong>Marital Status</strong>
+                            <p>
+                                {{patient.marital_status}}
+                                   
+                            </p>
+                            <hr>
+                            <strong>Profession</strong>
+                            <p>{{patient.profession}}</p>
+                            <hr>
+                            <strong>Phone</strong>
+                            <p>{{patient.phone}}</p>
+                            <hr>
+                            <strong>Emergency Phone</strong>
+                            <p>{{patient.emergency_phone}}</p>
+                            <hr>
+                            <strong>Email ID</strong>
+                            <p>{{patient.email}}</p>
+                            <hr>
+                            <strong>Address</strong>
+                            <address>{{patient.location}}</address>
+                        </div>
+                        <a href="{{patient.get_absolute_url5}}" style="width:100%;"><button class="btn btn-raised g-bg-cyan" style="width:100%; text-align: center;">His parameters</button></a>
+                    </div>
+                </div>
+            
+            <div class="col-lg-8 col-md-12 col-sm-12">
+                <form method="post" action="{% url 'management:doctorMakePrescriptions' pk=pk %}">
+                    {% csrf_token %}
+                    
+ 
+                    
+                <div class="card">
+                    <div class="body"> 
+                        <!-- Nav tabs -->
+                        <h3 style="text-align: center;">Prescription</h3>
+                        <button type="button" onclick="toActiveOne()">Activate</button>
+                        <br/><br/>
+                        <input type="hidden" id="prescriptionHidden" name="prescriptionHidden">
+                        <ul class="nav nav-tabs" role="tablist">
+                            
+                                
+                                <div class="row clearfix">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                Symptoms:
+                                                <textarea name="symptoms" id="symptoms" class="form-control"  class="textarea_ordonnance" required disabled="true">
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                Drug prescription:
+                                                <textarea name="drugPrescription" id="prescription" class="form-control" class="textarea_ordonnance"  disabled="true">
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                Examinations:
+                                                <textarea name="examinations" id="examinations" class="form-control" class="textarea_ordonnance"  disabled="true">
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                Recommendations:
+                                                <textarea name="recommendations" id="recommendations" class="form-control" class="textarea_ordonnance"  disabled="true">
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            
+
+                            
+                        </ul>
+                        
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="body"> 
+                        <h3 style="text-align: center;">Send to another department</h3>
+                        <button type="button" onclick="toActive1('depart')">Activate</button>
+                        <br/><br/>
+                        <input type="hidden" id="departmentHidden" name="departmentHidden">
+                        <div class="col-sm-12">
+                            <div class="form-group drop-custum">
+                                <select name="depart" id="depart" class="form-control show-tick" required disabled>
+                                    <option value="">-- Departments --</option>
+                                    {%for depart in departments%}
+                                    <option value={{depart.pk}}>{{depart.name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="body">
+                        <h3 style="text-align: center;">Make an appointment</h3><br/><br/>
+                        <button type="button" onclick="toActiveAppoint()">Activate</button>
+                        <br/><br/>
+                        <input type="hidden" id="appointmentHidden" name="appointmentHidden">
+                        
+                        <div class="row clearfix">
+                        
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        Doctor<input type="text" name="doctor" class="form-control" value="{{doctor}}" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        Patient<input type="text" name="patient" class="form-control" value="{{patient}}" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <br /><br />
+                            <div class="col-sm-6 ">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        Date<input type="date" id="date" name="date" class="datetimepicker form-control" value="{{current_date}}" min="{{current_date}}" max="{{max_date}}" required disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 ">
+                                
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        Hour<br/><br/><input type="time" id="hour" name="hour" min="07:00" max="18:00" placeholder="hh:mm" required disabled>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        
+                    </div>
+                    
+                </div>
+                        <div class="col-sm-12" style="text-align: center;">
+                            <button type="submit" class="btn btn-raised g-bg-cyan">Submit</button>    
+                        </div>
+                        
+                    </form>
+                </div>
+            </div>
+    </div>
+</section>
+{% endblock %}

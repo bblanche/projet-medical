@@ -1,0 +1,93 @@
+{% extends "management/cashier/base_cashier.html" %} 
+{% load static %} 
+
+{% block body %}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="block-header">
+            <h2>{{department.name}}</h2>
+            <small class="text-muted">Welcome to POLYCLINIC application</small>
+        </div>
+
+        <form style="text-align: center;" action="" method="POST">
+            {% csrf_token %}
+            <label for="">Name</label>
+            <input name='name' type="text" value="{{selectName}}">
+            <button>🔍</button>
+            <br>
+            <hr>
+        
+        </form>
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                   
+                    <div class="header">
+                        <h2><B>Description</B>: </h2>
+                            <h2>{{department.description}}</h2>
+                        
+                        <ul class="header-dropdown">
+                            <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="zmdi zmdi-more-vert"></i></a>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a href="javascript:void(0);">Action</a></li>
+                                    <li><a href="javascript:void(0);">Another action</a></li>
+                                    <li><a href="javascript:void(0);">Something else here</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="body">
+                        <h3 style="text-transform: uppercase; text-align: center;">ALL {{department.name}} PATIENTS</h3>
+                       <br/>
+                        <div class="table-responsive">
+
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name</th>
+                                        <th>Phone</th>
+                                        <th>Emergency phone</th>
+                                        <th>Email</th>
+                                        <th>Gender</th>
+                                        <th>Marital status</th>
+                                        <th>Date of birth</th>
+                                        <th>Profession</th>
+                                        <th>Date of creation</th>
+                                        <th>Has paid</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for patient in patients %}
+                                    <tr>
+                                        <td></td>
+                                        <td class="txt-oflo"><a href="{{patient.get_absolute_url2}}" >{{patient.patient.first_name}} {{patient.patient.last_name}}</a></td>
+                                        <td><span>{{patient.patient.phone}}</span> </td>
+                                        <td class="txt-oflo">{{patient.patient.emergency_phone}}</td>
+                                        <td class="txt-oflo">{{patient.patient.email}}</td>
+                                        <td class="txt-oflo">{{patient.patient.gender}}</td>
+                                        <td class="txt-oflo">{{patient.patient.marital_status}}</td>
+                                        <td class="txt-oflo">{{patient.patient.date_of_birth}}</td>
+                                        <td class="txt-oflo">{{patient.patient.profession}}</td>
+                                        <td class="txt-oflo">{{patient.patient.date_creation}}</td>
+                                        {% if patient.patient.has_paid %}
+                                        <td class="txt-oflo"><span class="label label-success">{{patient.patient.has_paid}}</span></td>
+                                        {% else %}
+                                        <td class="txt-oflo">{{patient.patient.has_paid}}</td>
+                                        {% endif %}
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        
+                            <!-- <a href="javascript:void(0);">Check all the sales</a> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </div>
+</section>   
+        {% endblock %}

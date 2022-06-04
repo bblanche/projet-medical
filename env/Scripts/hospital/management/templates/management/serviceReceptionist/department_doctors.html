@@ -1,0 +1,63 @@
+{% extends "management/serviceReceptionist/base.html" %} 
+{% load static %} 
+
+
+
+{% block body %}
+
+<section class="content" style="min-height: 700px;">
+    <div class="container-fluid">
+        <div class="block-header">
+            <h2>All Doctors</h2>
+        </div>
+
+        <form style="text-align: center;" action="{% url 'management:doctorAppointments' %}" method="POST">
+            {% csrf_token %}
+            <label for="">Name</label>
+            <input name='name' type="text" value="{{selectName}}">
+            <button>🔍</button>
+            <br>
+        </form>
+        <br><br>
+        
+        <div class="row clearfix">
+            {% for doctor in doctors %}
+        
+                    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+                        <div class="card">
+                            <div class="body">
+                                <div class="member-card verified">                            
+                                    <div class="thumb-xl member-thumb">
+                                        {% if doctor.profile %}
+                                        <img style="height: 120px; width: 150px; border-radius: 7px; float: left;" src="{{doctor.profile.url}}" class="img-thumbnail img-fluid" alt="profile-image" onclick="javascript:toggleVisibility('{{doctor.id}}');">    
+                                        {% else %}
+                                        <img style="height: 120px; width: 150px; border-radius: 7px; float: left;" src="/static/management/images/avatar_doctor.jpg" class="img-thumbnail img-fluid" alt="" onclick="javascript:toggleVisibility('{{doctor.id}}');">   
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="" style="text-align: center;">
+                                        <h5 class="m-b-0" style="text-transform: uppercase;">{{doctor.first_name}}</h5>
+                                        <h6 class="m-b-0" style="text-transform: uppercase;">{{doctor.last_name}} </h6>
+                                        <address class="m-b-0">
+                                            <h6><abbr title="Phone">Phone:</abbr> {{doctor.phone}}</h6>
+                                        </address>
+                                        {% if doctor.is_active == True %}
+                                        <span class="label label-success"> is active </span>
+                                        {% else %}
+                                        <span  class="is_not_active_bg"> is not active </span>
+                                        {% endif %}
+                                    </div>
+                                    <br/>
+                                    <div id="{{doctor.id}}" style="display:none;">                          
+                                    <a href="{{ doctor.get_absolute_url }}"  class="btn btn-raised btn-sm">View Profile</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}

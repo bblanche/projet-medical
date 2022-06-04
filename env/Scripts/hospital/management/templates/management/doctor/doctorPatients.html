@@ -1,0 +1,58 @@
+{% extends "management/doctor/base_doctor.html" %}
+{% load static %}
+
+{% block body %}
+
+<section class="content patients" style="min-height: 700px;">
+    <div class="container-fluid">
+        <div class="block-header">
+            <h2>All Patients </h2>
+        </div>
+
+        <form style="text-align: center;" action="{% url 'management:doctorAppointments' %}" method="POST">
+            {% csrf_token %}
+            <label for="">Name</label>
+            <input name='name' type="text" value="{{selectName}}">
+            <button>🔍</button>
+            <br>
+        </form>
+        <br><br>
+
+        <div class="row clearfix">
+            {% for patient in patients %}
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="card all-patients">
+                    <div class="body">
+                        <div class="row">
+                                
+                                <div class="col-md-4 col-sm-4 text-center m-b-0">
+                                    <i class="zmdi zmdi-folder zmdi-hc-5x" onclick="javascript:toggleVisibility('{{patient.id}}');"></i>
+                                    <!--img src="../static/management/images/dossier.png" alt="user" class="img-thumbnail img-fluid" onclick="javascript:toggleVisibility('{{patient.id}}');"/-->
+                                    <div id="{{patient.id}}" style="display:none;">
+                                        <a href="{{patient.patient.get_absolute_url5}}" style="width:100%;"><button class="btn btn-raised g-bg-cyan" style="width:100%; text-align: center;">Informations</button></a>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-8 col-sm-8 m-b-0">
+                                    <h5 class="m-b-0">{{patient.patient.first_name | upper }}</h5>
+                                    <h6 class="m-b-0">{{patient.patient.last_name | title}} </h6>
+                                    <address class="m-b-0">
+                                        <h6><abbr title="Phone">Phone:</abbr> {{patient.patient.phone}}</h6>
+                                    </address>
+                                   
+                                </div>
+
+                                
+                            
+                                
+                      
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+</section>
+{% endblock %}

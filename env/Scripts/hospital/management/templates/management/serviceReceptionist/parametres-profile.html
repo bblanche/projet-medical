@@ -1,0 +1,137 @@
+{% extends "management/serviceReceptionist/base.html" %} 
+{% load static %} 
+
+{% block body %}
+
+<section class="content profile-page" style="min-height: 700px;">
+    <div class="container-fluid">
+        <div class="block-header">
+            <h2>ADD PARAMETERS</h2>
+            
+        </div>        
+        <div class="row clearfix">
+            <div class="col-lg-4 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="header">
+                        <h2><strong>ABOUT PATIENT</strong></h2>
+                    </div>
+                    <div class="body">
+                        <strong>Name</strong>
+                        <p style="text-transform: uppercase;">{{patient.first_name}} {{patient.last_name}}</p>
+                        <hr>
+                        <strong>Date of birth</strong>
+                        <p>{{patient.date_of_birth}}</p>
+                        <hr>
+                        <strong>Gender</strong>
+                        <p>{{patient.gender}}</p>
+                        <hr>
+                        <strong>Marital Status</strong>
+                        <p>
+                            {{patient.marital_status}}
+                        </p>
+                        <hr>
+                        <strong>Profession</strong>
+                        <p>{{patient.profession}}</p>
+                        <hr>
+                        <strong>Phone</strong>
+                        <p>{{patient.phone}}</p>
+                        <hr>
+                        <strong>Emergency Phone</strong>
+                        <p>{{patient.emergency_phone}}</p>
+                        <hr>
+                        <strong>Email ID</strong>
+                        <p>{{patient.email}}</p>
+                        <hr>
+                        <strong>Address</strong>
+                        <address>{{patient.location}}</address>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="body"> 
+                        <h5 style="color: green; text-align: center;">{{message}}</h5> 
+                        <!-- Nav tabs -->
+                            <form method="post" action="{% url 'management:parametres_profile' pk=pk %}">
+                                {% csrf_token %}
+                                <div class="row clearfix">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                Blood_pressure (Hg/Hg)<input type="text" name="blood_pressure" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                Pulse(beats per minute)<input type="text" name="pulse" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                Breathing_rate (breaths per minute)<input type="text" name="breathing_rate" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                Heart_rate (beats per minute)<input type="text" name="heart_rate" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                Weight (Kg)<input type="text" name="weight" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                Height(m)<input type="text" name="height" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                blood_sugar (mg/dL)<input type="text" name="blood_sugar" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                temperature (°C)<input type="text" name="temperature" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                Other<textarea rows="4" name="other" class="form-control no-resize" placeholder="Please type other parameters with their values..."></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                   
+                                    
+                                    <div class="col-sm-12" style="text-align: center;">
+                                        <button type="submit" class="btn btn-raised g-bg-cyan">Apply</button>
+                                    </div>
+                                </div>
+                            </form>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

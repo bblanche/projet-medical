@@ -1,0 +1,88 @@
+/*th, td, tr {
+    border: 5px solid #095484;
+  }*/
+  table {
+      counter-reset: rowNumber;
+  }
+  tbody tr{
+      counter-increment: rowNumber;
+  }
+  table tbody tr td:first-child::before {
+      content: counter(rowNumber);
+  }
+.center{
+    text-align: center;
+}
+.minheightcontent{
+    min-height: 700px;
+}
+.infoindex{
+    color: rgba(20, 156, 247, 0.904); font-size: 300%; text-align: center;
+}
+.divinfoindex{
+    text-align: center; min-height: 200px;
+}
+.styleimage{
+    height: 120px;
+    width: 150px; 
+    border-radius: 7px; 
+    float: left;
+}
+.uppercase{
+    text-transform: uppercase; color: black;
+}
+.red{
+    width: auto; background-color: red;
+}
+.floatright{
+    float: right;
+}
+.none{
+    display:none;
+}
+.is_active{
+    color:aliceblue;
+    text-align: center;
+    font-weight: bolder;
+    margin-left: 1em;
+    font-size: large;
+  }
+.active{
+    color: aliceblue; 
+    font-weight: bolder; 
+    margin-left: 1em;
+}
+.notify{
+    margin-left: 4em;
+}
+.messagedone{
+    color: green; text-align: center;
+}
+.infouser{
+    color:whitesmoke;
+}
+.imgdoctor{ height: 90px; width: 100px; border-radius: 50px; float: left;}
+.is_not_active{
+    color:red; text-align: center;
+    font-weight: bolder;
+    margin-left: 1em;
+    font-size: large;
+}
+.is_not_active_bg{
+    width: auto; 
+    background-color: red;
+}
+.textarea_ordonnance{
+    height: 200px;
+    border: solid black;
+}
+.profile{
+    width: 100%;
+    height: 400px;
+}
+.profileDash{
+    height: 120px;
+    width: 150px;
+    border-radius: 50px;
+    float: left;
+}

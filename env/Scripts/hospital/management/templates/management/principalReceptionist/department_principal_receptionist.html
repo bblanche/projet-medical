@@ -1,0 +1,132 @@
+{% extends "management/principalReceptionist/base_principal_receptionist.html" %} 
+{% load static %} 
+
+{% block body %}
+
+<section class="content" style="min-height: 700px;">
+    <div class="container-fluid">
+        <div class="block-header">
+            <h2>{{department.name}}</h2>
+            <small class="text-muted">Welcome to POLYCLINIC application</small>
+        </div>
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                   
+                    <div class="header">
+                        <h2><B>Description</B>:</h2> 
+                            <h2>{{department.description}}</h2>
+                        <ul class="header-dropdown">
+                            <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="zmdi zmdi-more-vert"></i></a>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a href="javascript:void(0);">Action</a></li>
+                                    <li><a href="javascript:void(0);">Another action</a></li>
+                                    <li><a href="javascript:void(0);">Something else here</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="body">
+                        <h3 style="text-transform: uppercase; text-align: center;">{{department.name}} STAFF</h3>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 50%;">DOCTORS</th>
+                                        <th>DEPARTMENT'S RECEPTIONIST</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Name</th>
+                                                        <th>Phone</th>
+                                                        <th>Email</th>
+                                                        <th>Is active</th>
+                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for doctor in doctors %}
+                                                    <tr>
+                                                        <td></td>
+                                                        <td class="txt-oflo"><span >{{doctor.first_name}} {{doctor.last_name}}</span></td>
+                                                        <td><span>{{doctor.phone}}</span> </td>
+                                                        <td class="txt-oflo">{{doctor.email}}</td>
+                                                        {% if doctor.is_active %}
+                                                        <td class="txt-oflo"><span class="label label-success">{{doctor.is_active}}</span></td>
+                                                        {% else %}
+                                                        <td class="txt-oflo">{{doctor.is_active}}</span></td>
+                                                        {% endif %}
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                            {% if paginate %}
+                                        
+                                            {% if doctors.has_previous %}
+                                                <a href="?pageD={{ doctors.previous_page_number }}">Previous</a>
+                                            {% endif %}
+                                            {% if doctors.has_next %}
+                                                <a href="?pageD={{ doctors.next_page_number }}" style="float: right;">Next</a>
+                                            {% endif %}
+                                        
+                                            {% endif %}
+                                        </td>
+
+                                        <td>
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Name</th>
+                                                        <th>Phone</th>
+                                                        <th>Email</th>
+                                                        <th>Is active</th>
+                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for serviceReceptionist in serviceReceptionists %}
+                                                    <tr>
+                                                        <td></td>
+                                                        <td class="txt-oflo"><span>{{serviceReceptionist.first_name}} {{serviceReceptionist.last_name}}</span></td>
+                                                        <td><span>{{serviceReceptionist.phone}}</span> </td>
+                                                        <td class="txt-oflo">{{serviceReceptionist.email}}</td>
+                                                        {% if serviceReceptionist.is_active %}
+                                                        <td class="txt-oflo"><span class="label label-success">{{serviceReceptionist.is_active}}</span></td>
+                                                        {% else %}
+                                                        <td class="txt-oflo">{{serviceReceptionist.is_active}}</span></td>
+                                                        {% endif %}
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                            {% if paginate %}
+                                        
+                                            {% if serviceReceptionists.has_previous %}
+                                                <a href="?pageS={{ serviceReceptionists.previous_page_number }}">Previous</a>
+                                            {% endif %}
+                                            {% if serviceReceptionists.has_next %}
+                                                <a href="?pageS={{ serviceReceptionists.next_page_number }}" style="float: right;">Next</a>
+                                            {% endif %}
+                                        
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- <a href="javascript:void(0);">Check all the sales</a> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </div>
+</section>   
+        {% endblock %}

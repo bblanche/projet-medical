@@ -1,0 +1,68 @@
+{% extends "management/doctor/base_doctor.html" %}
+{% load static %}
+
+{% block body %}
+
+<section class="content patients" style="min-height: 700px;">
+    <div class="container-fluid">
+        <div class="block-header" style="text-align: center;">
+            <h2>DEPARTMENT OF {{patient.first_name | upper}} {{patient.last_name | title}} </h2>
+        </div>
+
+        <form style="text-align: center;" action="{% url 'management:doctorAppointments' %}" method="POST">
+            {% csrf_token %}
+            <label for="">Name</label>
+            <input name='name' type="text" value="{{selectName}}">
+            <button>🔍</button>
+            <br>
+        </form>
+        
+        
+        <div class="row clearfix">
+            {% for patient in patients %}
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="card all-patients">
+                    <div class="body">
+                        <div class="row">
+                            
+                                
+                                <div class="col-md-4 col-sm-4 text-center m-b-0">
+                                    <i class="zmdi zmdi-folder zmdi-hc-5x" onclick="javascript:toggleVisibility('{{patient.id}}');"></i>
+                                    <!--img src="../static/management/images/dossier.png" alt="user" class="img-thumbnail img-fluid" onclick="javascript:toggleVisibility('{{patient.id}}');"/-->
+                                    <div id="{{patient.id}}" style="display:none;">
+                                        <a href="{{patient.get_absolute_url4}}" style="width:100%;"><button class="btn btn-raised g-bg-cyan" style="width:100%; text-align: center;">Informations</button></a>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-8 col-sm-8 m-b-0">
+                                    <h5 class="m-b-0" >{{patient.department.name | upper}}</h5>
+                                    {% if patient.department == user_department%}
+                                        {% if patient.has_paid == True %}
+                                        <span class="label label-success"> Paid </span>
+                                        {% else %}
+                                        <span style="width: auto; background-color: red;"> Not paid </span>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% if paginate %}
+                                        
+            {% if patients.has_previous %}
+                <a href="?pageP={{ patients.previous_page_number }}">Previous</a>
+            {% endif %}
+            {% if patients.has_next %}
+                <a href="?pageP={{ patients.next_page_number }}" style="float: right;">Next</a>
+            {% endif %}
+        
+            {% endif %}
+        </div>
+    </div>
+    
+</section>
+{% endblock %}
+                        
+                  

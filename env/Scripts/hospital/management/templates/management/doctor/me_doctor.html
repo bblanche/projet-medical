@@ -1,0 +1,203 @@
+{% extends "management/doctor/base_doctor.html" %} 
+{% load static %} 
+
+{% block body %}
+
+<section class="content profile-page" style="min-height: 700px;">
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-lg-4 col-md-12 col-sm-12">
+                <div class="header">
+                    <h4><strong>ABOUT ME</strong></h4>
+                </div>
+                <div class="card">
+                    {% if doctor.profile %}
+                    <img class="profile" src="{{doctor.profile.url}}" alt="">
+                    {% else %}
+                    <div> <img class="profile" src="/static/management/images/avatar_doctor.jpg" alt=""> </div>
+                    {% endif %}
+             
+                    <div class="body">
+                        <strong>DEPARTMENT: {{doctor.department.name}}</strong>
+                        <hr>
+                        <strong>Name</strong>
+                        <p style="text-transform: uppercase;">{{doctor.first_name}} {{doctor.last_name}}</p>
+                        <hr>
+                        <strong>USERNAME</strong>
+                        <p>{{user.username}}</p>
+                        <hr>
+                        <strong>Date of birth</strong>
+                        <p>{{doctor.date_of_birth}}</p>
+                        <hr>
+                        <strong>Gender</strong>
+                        <p>{{doctor.gender}}</p> 
+                        <hr>
+                        <strong>Marital status</strong>
+                        <p>{{doctor.marital_status}}</p>     
+                        <hr>
+                        <strong>Phone</strong>
+                        <p>{{doctor.phone}}</p>
+                        <hr>
+                        <strong>Email</strong>
+                        <p>{{doctor.email}}</p>
+                        <hr>
+                        <strong>Address</strong>
+                        <address>{{doctor.location}}</address>
+                        <hr>
+                        <strong>Description</strong>
+                        <address>{{doctor.description}}</address>
+                        <hr>
+                        <strong>Date of creation</strong>
+                        <address>{{doctor.date_creation}}</address>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-8 col-md-12 col-sm-12">
+            <br/>
+            <br/>
+                <div class="card">
+                    <div class="body"> 
+                        <!-- Nav tabs -->
+                        
+                            <form method="post" action="{% url 'management:meDoctor' %}">
+                                {% csrf_token %}
+                                
+                                <label for="profile">Select your picture</label>
+                                <input type="file" id="profile" name="profile" accept=".jpg, .jpeg, .png">
+                                <br/><br/>
+                                <div class="row clearfix">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line"> <strong>Name</strong>
+                                               <input type="text" name="first_name" class="form-control" value={{doctor.first_name}} required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line"> <strong>Username</strong> 
+                                                <input type="text" name="last_name" class="form-control" value={{doctor.last_name}} required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <strong> Date of birth</strong> <input type="date" name="date_of_birth" class="datepicker form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group drop-custum"> <strong>Gender</strong> 
+                                            <select name="gender" class="form-control show-tick" required>
+                                                <option value="">-- Gender --</option>
+                                                <option value="Man">Man</option>
+                                                <option value="Woman">Woman</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line"><strong> Phone</strong>
+                                            <input type="text" name="phone" class="form-control" value={{doctor.phone}} required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line"><strong> Email</strong>
+                                                <input type="text" name="email" class="form-control" value={{doctor.email}} required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group drop-custum"><strong>Marital Status</strong>
+                                            <select name="marital_status" class="form-control show-tick" required>
+                                                <option value="">-- Marital Status --</option>
+                                                <option value="SINGLE">Single</option>
+                                                <option value="MARRIED">Married</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!--div class="col-sm-2">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="checkbox" class="form-control" name="maritalStatus" id="maritalStatus" value="True">
+                                                <label for="maritalStatus">marital status</label>
+                                                </input>
+                                            </div>
+                                        </div>
+                                    </div-->
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line"><strong>Address</strong>
+                                                <input type="text" name="location" class="form-control" value={{doctor.location}} required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line"><strong>Description</strong>
+                                                <textarea rows="3" name="description" class="form-control" value={{principal_receptionist.description}}></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-12" style="text-align: center;">
+                                        <button type="submit" class="btn btn-raised g-bg-cyan">Apply</button>
+                                    </div>
+                                </div>
+                            </form>
+                    </div>
+                </div>
+
+
+                <br/>
+                <br/>
+                <br/>
+
+                <!--div class="card">
+                    <div class="body"> 
+                        
+                            <form method="post" action="{% url 'management:meServiceReceptionist' %}">
+                                {% csrf_token %}
+                                
+                                <div class="row clearfix">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                               Username<input type="text" name="username" class="form-control" value={{user.username}} required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                Password<input type="password" name="password" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                Verify password<input type="password" name="password" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12" style="text-align: center;">
+                                        <button type="submit" class="btn btn-raised g-bg-cyan">Apply</button>
+                                    </div>
+                                </div>
+                            </form>
+                    </div>
+                </div-->
+            
+    </div>
+</section>
+{% endblock %}

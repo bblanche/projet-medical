@@ -1,0 +1,144 @@
+{% extends "management/doctor/base_doctor.html" %} 
+{% load static %} 
+
+{% block body %}
+
+<section id="imprime_moi" class="content profile-page" style="min-height: 700px;">
+    <div class="container-fluid">
+        <div class="block-header">
+            <h2>MAKE RECEIPT</h2>
+        </div>        
+        <div class="row clearfix">
+            <div class="col-lg-4 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="header">
+                        <h2><strong>ABOUT PATIENT</strong></h2>
+                    </div>
+                    <div class="body">
+                        <strong>Name</strong>
+                        <p style="text-transform: uppercase;">{{patient.first_name}} {{patient.last_name}}</p>
+                        <hr>
+                        <strong>Date of birth</strong>
+                        <p>{{patient.date_of_birth}}</p>
+                        <hr>
+                        <strong>Gender</strong>
+                        <p>{{patient.gender}}</p>
+                        <hr>
+                        <strong>Marital Status</strong>
+                        <p>
+                            {{patient.marital_status}}
+                               
+                        </p>
+                        <hr>
+                        <strong>Profession</strong>
+                        <p>{{patient.profession}}</p>
+                        <hr>
+                        <strong>Phone</strong>
+                        <p>{{patient.phone}}</p>
+                        <hr>
+                        <strong>Emergency Phone</strong>
+                        <p>{{patient.emergency_phone}}</p>
+                        <hr>
+                        <strong>Email ID</strong>
+                        <p>{{patient.email}}</p>
+                        <hr>
+                        <strong>Address</strong>
+                        <address>{{patient.location}}</address>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-12 col-sm-12">
+                <div class="card">
+                    <span style="color: green; text-align: center;">{{message}}</span>
+                    <div class="body"> 
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs" role="tablist">
+                            <form method="post" id="imprime_moi">
+                                {% csrf_token %}
+                                <div class="row clearfix">
+                                    
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" name="department" class="form-control" value="Department: {{prescription.appointment.department}}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" name="patient" class="form-control" value="Patient: {{patient.first_name}} {{patient.last_name}}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                                <div class="row clearfix">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                Symptoms:
+                                                <textarea name="symptoms" class="form-control" style="height: 200px; border: solid black;" disabled>{{prescription.symptoms}}
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                Drug prescription:
+                                                <textarea name="drugPrescription" class="form-control" style="height: 200px; border: solid black;" disabled>{{prescription.drug_prescription}}
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                Examinations:
+                                                <textarea name="examinations" class="form-control" style="height: 200px; border: solid black;"  disabled>{{prescription.examinations}}
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                Recommendations:
+                                                <textarea name="recommendations" class="form-control" style="height: 200px; border: solid black;"  disabled>{{prescription.recommendations}}
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                            
+                                    <div class="col-sm-6">
+                                        
+                                        <button class="btn btn-raised g-bg-cyan" onclick="javascript:imprimer_bloc('imprime_moi');">Print</button>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" name="Doctor" class="form-control" value="Prescripted by Dr: {{prescription.doctor.first_name}} {{prescription.doctor.last_name}}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </form>
+                            
+
+                            
+                            
+                        </ul>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

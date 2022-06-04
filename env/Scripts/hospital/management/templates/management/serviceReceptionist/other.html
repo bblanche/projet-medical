@@ -1,0 +1,162 @@
+{% extends "management/serviceReceptionist/base.html" %} 
+{% load static %} 
+
+{% block body %}
+
+<section class="content profile-page minheightcontent">
+    <div class="container-fluid">
+        <div class="block-header">
+            <h2>Patient Profile</h2>
+            
+        </div>        
+        <div class="row clearfix">
+            <div class="col-lg-4 col-md-12 col-sm-12">
+               
+                <div class="card">
+                    <div class="header">
+                        <h2><strong>ABOUT PATIENT</strong></h2>
+                    </div>
+                    <div class="body">
+                        <strong>Name</strong>
+                        <p class="uppercase">{{patient.first_name}} {{patient.last_name}}</p>
+                        <hr>
+                        <strong>date of birth</strong>
+                        <p>{{patient.date_of_birth}}</p>
+                        <hr>
+                        <strong>Gender</strong>
+                        <p>{{patient.gender}}</p>
+                        <hr>
+                        <strong>Marital Status</strong>
+                        <p>{{patient.marital_status}}</p>
+                        <hr>
+                        <strong>Profession</strong>
+                        <p>{{patient.profession}}</p>
+                        <hr>
+                        <strong>Phone</strong>
+                        <p>{{patient.phone}}</p>
+                        <hr>
+                        <strong>Emergency Phone</strong>
+                        <p>{{patient.emergency_phone}}</p>
+                        <hr>
+                        <strong>Email ID</strong>
+                        <p>{{patient.email}}</p>
+                        <hr>
+                        <strong>Address</strong>
+                        <address>{{patient.location}}</address>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-12 col-sm-12">
+                
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="card">
+                        
+                        <div class="header">
+                            <ul class="header-dropdown">
+                                <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="zmdi zmdi-more-vert"></i></a>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li><a href="javascript:void(0);">Action</a></li>
+                                        <li><a href="javascript:void(0);">Another action</a></li>
+                                        <li><a href="javascript:void(0);">Something else here</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="body">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item"><button class="nav-link active"data-toggle="tab" onclick=" javascript:DeleteVisibility1('appointments', 'parameters');">APPOINTMENTS</button></li>
+                                <li class="nav-item"><button class="nav-link"data-toggle="tab" onclick="javascript:DeleteVisibility1('parameters', 'appointments');">ALL PARAMETERS</button></li>
+                            </ul>   
+                        
+                            <div class="table-responsive" id="appointments" class="col-sm-12">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>DEPARTMENT</th>
+                                            <th>DOCTOR</th>
+                                            <th>RECEPTIONIST</th>
+                                            <th>PATIENT</th>
+                                            <th>DATE</th>
+                                            <th>HOUR</th>
+                                            <th>STATE</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for appointment in appointments %}
+                                        <tr>
+                                            <td></td>
+                                            <td><span class="uppercase">{{appointment.department}}</span> </td>
+                                            <td class="txt-oflo"><a href="{{ appointment.doctor.get_absolute_url }}" class="uppercase">{{appointment.doctor.first_name}} {{appointment.doctor.last_name}}</a></td>
+                                            <td class="txt-oflo"><span class="uppercase">{{appointment.service_receptionist.first_name}} {{appointment.service_receptionist.last_name}}</span></td>
+                                            <td><a href="{{ appointment.patient.get_absolute_url4 }}" class="uppercase">{{appointment.patient.first_name}} {{appointment.patient.last_name}}</a> </td>
+                                            <td class="txt-oflo">{{appointment.date_appointment}}</td>
+                                            <td class="txt-oflo">{{appointment.hour_appointment}}</td>
+                                            {% if appointment.state == "Consulted" %}
+                                            <td class="txt-oflo"><span>{{appointment.state}}</span></td>
+                                            {% else %}
+                                            <td class="txt-oflo"><span class="is_not_active_bg">{{appointment.state}}</span></td>
+                                            {% endif %}   
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                <!-- <a href="javascript:void(0);">Check all the sales</a> -->
+                            </div>
+                            <div id = "parameters" class="table-responsive" class="col-sm-12" style="display:none ;">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>DEPARTMENT</th>
+                                            <th>Date_creation</th>
+                                            <th>Blood_pressure (Hg/Hg)</th>
+                                            <th>Pulse(beats per minute)</th>
+                                            <th>Breathing_rate (breaths per minute)</th>
+                                            <th>Heart_rate (beats per minute)</th>
+                                            <th>Weight (Kg)</th>
+                                            <th>Height(m)</th>
+                                            <th>blood_sugar (mg/dL)</th>
+                                            <th>temperature (°C)</th>
+                                            <th>Other</th>
+                                            
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for parameter in parameters %}
+                                        <tr>
+                                            <td></td>
+                                            <td><span class="uppercase">{{parameter.department}}</span> </td>
+                                            <td>{{parameter.date_creation}}</td>
+                                            <td class="txt-oflo"><span>{{parameter.blood_pressure}}</span></td>
+                                            <td><span>{{parameter.pulse}}</span> </td>
+                                            <td>{{parameter.breathing_rate}}</td>
+                                            <td>{{parameter.heart_rate}}</td>
+                                            <td class="txt-oflo"><span>{{parameter.weight}}</span></td>
+                                            <td><span>{{parameter.height}}</span> </td>
+                                            <td>{{parameter.blood_sugar}}</td>
+                                            <td class="txt-oflo"><span>{{parameter.temperature}}</span></td>
+                                            <td><span>{{parameter.other}}</span> </td>
+                                            
+                                           </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                <!-- <a href="javascript:void(0);">Check all the sales</a> -->
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>    
+        </div>
+        </div>
+    </div>
+</section>   
+{% endblock %}
+
+        
+        

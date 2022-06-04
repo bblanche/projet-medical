@@ -1,0 +1,152 @@
+{% extends "management/cashier/base_cashier.html" %} 
+{% load static %} 
+
+{% block body %}
+
+<section id="imprime_moi" class="content profile-page" style="min-height: 700px;">
+    <div class="container-fluid">
+        <div class="block-header">
+            <h2>RECEIPT</h2>
+            
+        </div>        
+        <div class="row clearfix">
+            <div class="col-lg-4 col-md-12 col-sm-12">
+               
+                <div class="card">
+                    <div class="header">
+                        <h2><strong>ABOUT PATIENT</strong></h2>
+                    </div>
+                    <div class="body">
+                        <strong>Name</strong>
+                        <p style="text-transform: uppercase;">{{patient.first_name}} {{patient.last_name}}</p>
+                        <hr>
+                        <strong>Date of birth</strong>
+                        <p>{{patient.date_of_birth}}</p>
+                        <hr>
+                        <strong>Gender</strong>
+                        <p>{{patient.gender}}</p>
+                        <hr>
+                        <strong>Marital Status</strong>
+                        <p>
+                            {{ patient.marital_status}}
+                                
+                        </p>
+                        <hr>
+                        <strong>Profession</strong>
+                        <p>{{patient.profession}}</p>
+                        <hr>
+                        <strong>Phone</strong>
+                        <p>{{patient.phone}}</p>
+                        <hr>
+                        <strong>Emergency Phone</strong>
+                        <p>{{patient.emergency_phone}}</p>
+                        <hr>
+                        <strong>Email ID</strong>
+                        <p>{{patient.email}}</p>
+                        <hr>
+                        <strong>Address</strong>
+                        <address>{{patient.location}}</address>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-12 col-sm-12">
+                <div class="card">
+                    <span style="color: green; text-align: center;">{{message}}</span>
+                    <div class="body"> 
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs" role="tablist">
+                            <form method="post"  >
+                                {% csrf_token %}
+                                <div class="row clearfix">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                               <input type="text" name="cashier" class="form-control" value="Cashier: {{payment.cashier.first_name}} {{payment.cashier.last_name}}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" name="department" class="form-control" value="Department: {{payment.department.name}}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" name="patient" class="form-control" value="Patient: {{payment.patient.first_name}} {{payment.patient.last_name}}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                            <input type="text" name="payment_motif" class="form-control" value="Motif: {{payment.motif}}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                            <input type="text" name="payment_method" class="form-control" value="Payment method: {{payment.payment_method}}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                            <input type="text" name="motif" class="form-control" value="Payment method: {{payment.amount}}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" name="amount" class="form-control" value="Created date: {{payment.date_creation}}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" name="amount" class="form-control" value="Receipt expiration: {{validity}}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                   
+                                    
+                                    <!--div class="col-sm-2">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="checkbox" class="form-control" name="maritalStatus" id="maritalStatus" value="True">
+                                                <label for="maritalStatus">marital status</label>
+                                                </input>
+                                            </div>
+                                        </div>
+                                    </div-->
+                                  
+                                    <div class="col-sm-12">
+                                        
+                                        <button class="btn btn-raised g-bg-cyan" onclick="javascript:imprimer_bloc('imprime_moi');">Print</button>
+                                    </div>
+                                </div>
+                                </form>
+                            
+
+                            
+                            
+                        </ul>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

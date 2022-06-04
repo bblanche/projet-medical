@@ -1,0 +1,43 @@
+{% extends "management/base copy.html" %} 
+{% load static %} 
+
+{% block body %}
+
+<section class="content patients">
+    <div class="container-fluid">
+        <div class="block-header">
+            <h2>All Patients</h2>
+            <small class="text-muted">Welcome to POLYCLINIC application</small>
+           
+        </div>
+        <div class="row clearfix">
+            {% for patient in patients %}
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="card all-patients">
+                    <div class="body">
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4 text-center m-b-0">
+                                {% if patient.profile %}
+                                <a href="{{patient.get_absolute_url}}" class="p-profile-pix"><img src="{{patient.profile.url}}" alt="user" class="img-thumbnail img-fluid"></a>
+                                {% else %}
+                                <a href="{{patient.get_absolute_url}}" class="p-profile-pix"><img src="http://via.placeholder.com/130x130" alt="user" class="img-thumbnail img-fluid"></a>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-8 col-sm-8 m-b-0">
+                                <h5 class="m-b-0">{{patient.first_name}} <a href="javascript:void(0);" class="edit"><i class="zmdi zmdi-edit"></i></a></h5> <small>{{patient.last_name}}</small>
+                                <address class="m-b-0">
+                                   {{patient.id_number}}<br>
+                                    <abbr title="Phone">P:</abbr> {{patient.phone}}
+                                </address>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <h1>No patient matched your search</h1>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

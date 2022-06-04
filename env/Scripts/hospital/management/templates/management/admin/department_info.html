@@ -1,0 +1,52 @@
+{% extends "management/admin/base_admin.html" %} 
+
+
+{% load static %} 
+
+{% block body %}
+
+<section class="content home">
+    <div class="container-fluid">
+        <div class="block-header">
+            
+            <small class="text-muted">Welcome to POLYCLINIC application</small>
+        </div>
+        <form style="text-align: center;" action="{% url 'management:doctorAppointments' %}" method="POST">
+            {% csrf_token %}
+            <label for="">Name</label>
+            <input name='name' type="text" value="{{selectName}}">
+            <button>🔍</button>
+            <br>
+        </form>
+        <div class="fa-3x">
+            <a href="{% url 'management:department_add_department_admin' %}"><i class="zmdi animated -text-light-blue zmdi-plus-circle zmdi-hc-4x"></i></a>
+        </div>
+        <br/>
+        <div class="row clearfix" >
+            {% for department in departments %}
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="card">
+                    {% if department.image %}  
+                    <img style="height: 250px; width: 100%; border-radius: 7px; float: left;" src="{{department.image.url}}" class="img-fluid"  alt="Card image">
+                   
+                    {% else %}
+                    <span style="text-align: center;"><img src="http://via.placeholder.com/130x130" class="img-fluid" alt="" style="height: 250px; width: 100%; border-radius: 7px; float: left;"></span>  
+                    {% endif %} 
+                    <div class="card-body">
+                        <h4 class="card-title" style="text-align: center;">{{department.name}}</h4>
+                        
+                    </div>
+                        <a href="{{department.get_absolute_url3}}" ><button class="btn btn-raised g-bg-cyan" style="width:100%; text-align: center;" >Staff informations</button></a>  
+                        <a href="{{department.get_absolute_url4}}" ><button class="btn btn-raised g-bg-cyan" style="width:100%; text-align: center;">Patient informations</button></a>
+                        
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+
+        
+</section>
+
+{% endblock %}
+

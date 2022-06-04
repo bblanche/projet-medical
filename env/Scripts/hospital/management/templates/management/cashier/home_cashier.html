@@ -1,0 +1,41 @@
+{% extends "management/cashier/base_cashier.html" %} 
+
+
+{% load static %} 
+
+{% block body %}
+
+<section class="content home">
+    <div class="container-fluid">
+        <div class="block-header">
+            <h4 class="mb-0"><strong>Bienvenue {{cashier.first_name}} {{cashier.last_name}}</strong></h4>
+            <small class="text-muted">Welcome to Polyclinic application</small>
+        </div>
+        
+        <div class="row clearfix">
+            {% for department in departments %}
+            <div class="col-lg-3 col-md-6 col-sm-12">
+                <div class="card">
+                    {% if department.image %}  
+                    <img style="height: 250px; width: 100%; border-radius: 7px; float: left;" src="{{department.image.url}}" class="img-fluid"  alt="Card image">
+                   
+                    {% else %}
+                    <span style="text-align: center;"><img src="http://via.placeholder.com/130x130" class="img-fluid" alt="" style="height: 250px; width: 100%; border-radius: 7px; float: left;"></span>  
+                    {% endif %} 
+                    <div class="card-body">
+                        <h4 class="card-title" style="text-align: center; max-width: 90%">{{department.name}}</h4>
+                        
+                    </div>
+                        <a href="{{department.get_absolute_url5}}" ><button class="btn btn-raised g-bg-cyan" style="width:100%; text-align: center;">Patient informations</button></a>
+                    
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+
+        
+</section>
+
+{% endblock %}
+

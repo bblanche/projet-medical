@@ -1,0 +1,54 @@
+{% extends "management/doctor/base_doctor.html" %} 
+{% load static %} 
+
+{% block body %}
+<section class="content" style="min-height: 700px;">
+    <div class="container-fluid">
+        <div class="block-header">
+            <span class="is_active">{{message}}</span>
+            <h2>All Prescriptions</h2>
+        </div>
+
+        <form style="text-align: center;" action="{% url 'management:doctorAppointments' %}" method="POST">
+            {% csrf_token %}
+            <label for="">Name</label>
+            <input name='name' type="text" value="{{selectName}}">
+            <button>🔍</button>
+            <br>
+        </form>
+        <br><br>
+        <div class="row clearfix"> <table class="table table-striped">
+            
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>DEPARTMENT</th>
+                    <th style="width: 30%;">PRESCRIPTED DATE</th>
+                    <th style="width: 50%;">PATIENT</th>
+                    <th style="width: 10%;">ACTION</th>
+                    
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {% for prescription in prescriptions %}
+                <tr>
+                    <td></td>
+                    <td><span style="text-transform: uppercase;">{{prescription.appointment.department}}</span> </td>
+                    <td class="txt-oflo">{{prescription.prescripted_date}}</td>
+                    <td class="txt-oflo"><a href="{{prescription.patient.get_absolute_url5}}" style="color: black;">{{prescription.patient.first_name}} {{prescription.patient.last_name}}</a></td>
+                    <td class="txt-oflo"><a href="{{prescription.get_absolute_url2}}"><button class="btn btn-raised g-bg-cyan" style="width:100%; text-align: center;">View</button></a></td>
+                    
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+           
+            
+        </div>
+    </div>
+    
+
+</section>
+
+{% endblock %}

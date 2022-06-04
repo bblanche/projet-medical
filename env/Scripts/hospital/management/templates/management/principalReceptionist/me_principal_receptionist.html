@@ -1,0 +1,203 @@
+{% extends "management/principalReceptionist/base_principal_receptionist.html" %} 
+{% load static %} 
+
+{% block body %}
+
+<section class="content profile-page" style="min-height: 700px;">
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-lg-4 col-md-12 col-sm-12">
+                <div class="header">
+                    <h4><strong>ABOUT ME</strong></h4>
+                </div>
+                <div class="card">
+                    {% if principal_receptionist.profile %}
+                    <img class="profile" src="{{principal_receptionist.profile.url}}" alt="">
+                    {% else %}
+                    <div> <img class="profile" src="/static/management/images/avatarPrincipalReceptionist.jpg" alt=""> </div>
+                    {% endif %}
+             
+                    <div class="body">
+                        <strong>DEPARTMENT: {{principal_receptionist.department.name}}</strong>
+                        <hr>
+                        <strong>Name</strong>
+                        <p style="text-transform: uppercase;">{{principal_receptionist.first_name}} {{principal_receptionist.last_name}}</p>
+                        <hr>
+                        <strong>Username</strong>
+                        <p>{{user.username}}</p>
+                        <hr>
+                        <strong>Date of birth</strong>
+                        <p>{{principal_receptionist.date_of_birth}}</p>
+                        <hr>
+                        <strong>Gender</strong>
+                        <p>{{principal_receptionist.gender}}</p> 
+                        <hr>
+                        <strong>Marital status</strong>
+                        <p>{{principal_receptionist.marital_status}}</p>     
+                        <hr>
+                        <strong>Phone</strong>
+                        <p>{{principal_receptionist.phone}}</p>
+                        <hr>
+                        <strong>Emergency</strong>
+                        <p>{{principal_receptionist.Emergency_phone}}</p>
+                        <hr>
+                        <strong>Email</strong>
+                        <p>{{principal_receptionist.email}}</p>
+                        <hr>
+                        <strong>Address</strong>
+                        <address>{{principal_receptionist.location}}</address>
+                        <hr>
+                        <strong>Description</strong>
+                        <address>{{principal_receptionist.description}}</address>
+                        <hr>
+                        <strong>Date of creation</strong>
+                        <address>{{principal_receptionist.date_creation}}</address>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-8 col-md-12 col-sm-12">
+            <br/>
+            <br/>
+                <div class="card">
+                    <div class="body"> 
+                        <!-- Nav tabs -->
+                            <form method="post" action="{% url 'management:mePrincipalReceptionist' %}">
+                                {% csrf_token %}
+                                <label for="profile">Select your picture</label>
+                                <input type="file" id="profile" name="profile" accept=".jpg, .jpeg, .png">
+                                <br/><br/>
+                                <div class="row clearfix">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line"><strong>Name</strong>
+                                               <input type="text" name="first_name" class="form-control" value={{principal_receptionist.first_name}} required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line"><strong>Username</strong>
+                                                <input type="text" name="last_name" class="form-control" value={{principal_receptionist.last_name}} required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line"><strong>Date of birth</strong>
+                                                <input type="date" name="date_of_birth" class="datepicker form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group drop-custum"><strong>Gende</strong>
+                                            <select name="gender" class="form-control show-tick" required>
+                                                <option value="">-- Gender --</option>
+                                                <option value="Man">Man</option>
+                                                <option value="Woman">Woman</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line"><strong>Phone</strong>
+                                            <input type="text" name="phone" class="form-control" value={{principal_receptionist.phone}} required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line"><strong>Email</strong>
+                                                <input type="text" name="email" class="form-control" value={{principal_receptionist.email}} required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group drop-custum"><strong>Marital Status</strong>
+                                            <select name="marital_status" class="form-control show-tick" required>
+                                                <option value="">-- Marital Status --</option>
+                                                <option value="SINGLE">Single</option>
+                                                <option value="MARRIED">Married</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!--div class="col-sm-2">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="checkbox" class="form-control" name="maritalStatus" id="maritalStatus" value="True">
+                                                <label for="maritalStatus">marital status</label>
+                                                </input>
+                                            </div>
+                                        </div>
+                                    </div-->
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line"><strong>Location</strong>
+                                                <input type="text" name="location" class="form-control" value={{principal_receptionist.location}} required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line"><strong>Description</strong>
+                                                <textarea rows="3" name="description" class="form-control" value={{principal_receptionist.description}}></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-12" style="text-align: center;">
+                                        <button type="submit" class="btn btn-raised g-bg-cyan">Apply</button>
+                                    </div>
+                                </div>
+                            </form>
+                    </div>
+                </div>
+
+
+                <br/>
+                <br/>
+                <br/>
+
+                <!--div class="card">
+                    <div class="body"> 
+                            <form method="post" action="{% url 'management:mePrincipalReceptionist' %}">
+                                {% csrf_token %}
+                                
+                                <div class="row clearfix">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                               <strong>Username</strong><input type="text" name="username" class="form-control" value={{user.username}} required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <strong>Password</strong><input type="password" name="password" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line"><strong>Verify password</strong>
+                                                <input type="password" name="password" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12" style="text-align: center;">
+                                        <button type="submit" class="btn btn-raised g-bg-cyan">Apply</button>
+                                    </div>
+                                </div>
+                            </form>
+                    </div>
+                </div-->
+            
+    </div>
+</section>
+{% endblock %}

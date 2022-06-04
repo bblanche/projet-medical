@@ -1,0 +1,140 @@
+{% extends "management/cashier/base_cashier.html" %} 
+{% load static %} 
+
+{% block body %}
+
+<section class="content profile-page" style="min-height: 700px;">
+    <div class="container-fluid">
+        <div class="block-header">
+            <h2>ADD PAYMENT</h2>
+            
+        </div>        
+        <div class="row clearfix">
+            <div class="col-lg-4 col-md-12 col-sm-12">
+               
+                <div class="card">
+                    <div class="header">
+                        <h2><strong>ABOUT PATIENT</strong></h2>
+                    </div>
+                    <div class="body">
+                        <strong>Name</strong>
+                        <p style="text-transform: uppercase;">{{patient.patient.first_name}} {{patient.patient.last_name}}</p>
+                        <hr>
+                        <strong>Date of birth</strong>
+                        <p>{{patient.patient.date_of_birth}}</p>
+                        <hr>
+                        <strong>Gender</strong>
+                        <p>{{patient.patient.gender}}</p>
+                        <hr>
+                        <strong>Marital Status</strong>
+                        <p>
+                            {{ patient.patient.marital_status}}
+                                
+                        </p>
+                        <hr>
+                        <strong>Profession</strong>
+                        <p>{{patient.patient.profession}}</p>
+                        <hr>
+                        <strong>Phone</strong>
+                        <p>{{patient.patient.phone}}</p>
+                        <hr>
+                        <strong>Emergency Phone</strong>
+                        <p>{{patient.patient.emergency_phone}}</p>
+                        <hr>
+                        <strong>Email ID</strong>
+                        <p>{{patient.patient.email}}</p>
+                        <hr>
+                        <strong>Address</strong>
+                        <address>{{patient.patient.location}}</address>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="body"> 
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs" role="tablist">
+                             <form method="post" action="{% url 'management:add_payment_patient_department_cashier' pk=pk %}">
+                                {% csrf_token %}
+                                <div class="row clearfix">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                               <input type="text" name="cashier" class="form-control" value="Cashier: {{cashier.first_name}} {{cashier.last_name}}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" name="department" class="form-control" value="Department: {{department.name}}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" name="patient" class="form-control" value="Patient: {{patient.patient.first_name}} {{patient.patient.last_name}}" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group drop-custum">
+                                            <select name="motif" class="form-control show-tick" required>
+                                                <option value="">-- Motif --</option>
+                                                {%for motif in motifs%}
+                                                <option value={{motif.pk}}>{{motif}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group drop-custum">
+                                            <select name="payment_method" class="form-control show-tick" required>
+                                                <option value="">-- payment_method --</option>
+                                                <option value="Orange money">Orange money</option>
+                                                <option value="MTN Mobile money">MTN Mobile money</option>
+                                                <option value="Cash">Cash</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                   
+                                    
+                                    <!--div class="col-sm-2">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="checkbox" class="form-control" name="maritalStatus" id="maritalStatus" value="True">
+                                                <label for="maritalStatus">marital status</label>
+                                                </input>
+                                            </div>
+                                        </div>
+                                    </div-->
+                                  
+                                    <div class="col-sm-12">
+                                        <button type="submit" class="btn btn-raised g-bg-cyan">Apply</button>
+                                        <button type="submit" class="btn btn-raised">Cancel</button>
+                                        {% if message == "Successfully paid..." %}
+                                        <span style="color: rgb(8, 200, 248); text-align: center;">{{message}}</span>
+                                        {% else %}
+                                        <span style="color: red; text-align: center;">{{message}}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </form>
+
+                            
+                            
+                        </ul>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

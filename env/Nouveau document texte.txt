@@ -1,0 +1,3 @@
+Run le projet
+aller dans Scripts et taper activate pour activer l'environnement virtuel
+aller dans hospital et taper python manage.py runserver

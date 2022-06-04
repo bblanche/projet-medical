@@ -1,0 +1,95 @@
+{% extends "management/admin/base_admin.html" %} 
+{% load static %} 
+
+{% block body %}
+
+<section class="content" style="min-height: 700px;">
+    <div class="container-fluid">
+        <div class="block-header">
+            <small class="text-muted">Welcome to POLYCLINIC application</small>
+            <h3 style=" text-align: center;">ALL DOCTORS</h3>
+        </div>
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                   
+                    <div class="header">
+                        <ul class="header-dropdown">
+                            <li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="zmdi zmdi-more-vert"></i></a>
+                                <ul class="dropdown-menu pull-right">
+                                    <li><a href="javascript:void(0);">Action</a></li>
+                                    <li><a href="javascript:void(0);">Another action</a></li>
+                                    <li><a href="javascript:void(0);">Something else here</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <form style="text-align: center;" action="{% url 'management:doctorAppointments' %}" method="POST">
+                        {% csrf_token %}
+                        <label for="">Name</label>
+                        <input name='name' type="text" value="{{selectName}}">
+                        <button>🔍</button>
+                        <br>
+                    </form>
+                    <div class="body">
+                        
+                        
+                        <div class="fa-3x">
+                            <a href="{% url 'management:add_doctor' %}"><i class="zmdi animated -text-light-blue zmdi-plus-circle zmdi-hc-4x"></i></a>
+                        </div>
+
+                          
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Department</th>
+                                        <th>Name</th>
+                                        <th>Phone</th>
+                                        <th>Email</th>
+                                        <th>Is active</th>
+                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                                
+                                    {% for doctor in doctors %}
+                                    <tr>
+                                        <td></td>
+                                        <td>{{doctor.department.name | title}}</td>
+                                        <td class="txt-oflo"><span >{{doctor.first_name | upper}} {{doctor.last_name | title}}</span></td>
+                                        <td><span>{{doctor.phone}}</span> </td>
+                                        <td class="txt-oflo">{{doctor.email}}</td>
+                                        {% if doctor.is_active %}
+                                        <td class="txt-oflo"><span class="label label-success">{{doctor.is_active}}</span></td>
+                                        {% else %}
+                                        <td class="txt-oflo">{{doctor.is_active}}</span></td>
+                                        {% endif %}
+                                        <td><i class="zmdi zmdi-delete"></i></td>
+                                    </tr>
+                                    {% endfor %}
+                                
+                                    {% if paginate %}
+                                
+                                    {% if doctors.has_previous %}
+                                        <a href="?pageD={{ doctors.previous_page_number }}">Previous</a>
+                                    {% endif %}
+                                    {% if doctors.has_next %}
+                                        <a href="?pageD={{ doctors.next_page_number }}" style="float: right;">Next</a>
+                                    {% endif %}
+                                
+                                    {% endif %}
+                        
+                                </tbody>
+                            </table>
+                            <!-- <a href="javascript:void(0);">Check all the sales</a> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+    </div>
+</section>   
+        {% endblock %}
