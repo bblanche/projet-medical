@@ -46,13 +46,13 @@ class PaymentsAdmin(admin.ModelAdmin):
     search_fields = ('cashier', 'patient', 'department' 'motif', 'payment_method')
 
 class PaymentMotifAdmin(admin.ModelAdmin):
-    list_display = ['payment_motif', 'amount_motif','department', 'durée_en_jours']
-    search_fields = ('payment_motif', 'amount_motif','department', 'durée_en_jours')
+    list_display = ['payment_motif', 'amount_motif','department', 'duree_en_jours']
+    search_fields = ('payment_motif', 'amount_motif','department', 'duree_en_jours')
 
     
 class PrescriptionAdmin(admin.ModelAdmin):
-    list_display = ['patient', 'doctor', 'symptoms', 'drug_prescription', 'examinations', 'recommendations', 'prescripted_date']
-    search_fields = ('patient', 'doctor', 'symptoms', 'drug_prescription', 'examinations', 'recommendations', 'prescripted_date')
+    list_display = ['patient','department', 'doctor', 'symptoms', 'drug_prescription', 'examinations', 'recommendations', 'prescripted_date']
+    search_fields = ('patient','department', 'doctor', 'symptoms', 'drug_prescription', 'examinations', 'recommendations', 'prescripted_date')
 
 admin.site.register(Departments)
 admin.site.register(Admins, AdminAdmin)

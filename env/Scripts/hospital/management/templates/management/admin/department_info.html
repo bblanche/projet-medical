@@ -5,7 +5,7 @@
 
 {% block body %}
 
-<section class="content home">
+<section class="content home minheightcontent">
     <div class="container-fluid">
         <div class="block-header">
             
@@ -36,8 +36,9 @@
                         <h4 class="card-title" style="text-align: center;">{{department.name}}</h4>
                         
                     </div>
-                        <a href="{{department.get_absolute_url3}}" ><button class="btn btn-raised g-bg-cyan" style="width:100%; text-align: center;" >Staff informations</button></a>  
-                        <a href="{{department.get_absolute_url4}}" ><button class="btn btn-raised g-bg-cyan" style="width:100%; text-align: center;">Patient informations</button></a>
+                    <a href="{{department.get_absolute_url6}}" ><button class="btn btn-raised g-bg-cyan" style="width:100%; text-align: center;" >Payment motif</button></a>  
+                        <a href="{{department.get_absolute_url7}}" ><button class="btn btn-raised g-bg-cyan" style="width:100%; text-align: center;" >Staff informations</button></a>  
+                        <a href="{{department.get_absolute_url8}}" ><button class="btn btn-raised g-bg-cyan" style="width:100%; text-align: center;">Patient informations</button></a>
                         
                 </div>
             </div>

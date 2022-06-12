@@ -1,0 +1,58 @@
+{% extends "management/admin/base_admin.html" %} 
+{% load static %} 
+
+{% block body %}
+
+<section class="content" style="min-height: 700px;">
+    <div class="container-fluid">
+        <div class="block-header">
+            <h2>ADD {{patient | title}} IN ANOTHER DEPARTMENT</h2>
+            <small class="text-muted">Welcome to POLYCLINIC application</small>
+        </div>
+        <div class="row clearfix">
+			<div class="col-lg-12 col-md-12 col-sm-12">
+				<div class="card">
+					<div class="header">
+						<ul class="header-dropdown m-r--5">
+							<li class="dropdown"> <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="zmdi zmdi-more-vert"></i></a>
+								<ul class="dropdown-menu pull-right">
+									<li><a href="javascript:void(0);" class=" waves-effect waves-block">Action</a></li>
+									<li><a href="javascript:void(0);" class=" waves-effect waves-block">Another action</a></li>
+									<li><a href="javascript:void(0);" class=" waves-effect waves-block">Something else here</a></li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+					<div class="body">
+                        <h5 style="color: green; text-align: center;">{{message}}</h5> 
+                    <form method="post" action="{{patient.get_absolute_url7}}">
+                        {% csrf_token %}
+                        <div class="row clearfix">
+                        <div class="col-sm-6">
+                            <div class="form-group drop-custum"><strong>Department</strong>
+                                <select name="department" class="form-control show-tick" required>
+                                    <option value="">-- department --</option>
+                                    {%for department in departments%}
+                                        
+                                        
+                                        <option value={{department.pk}}>{{department.name}}</option>
+                                        
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-12">
+                            <button type="submit" class="btn btn-raised g-bg-cyan" style="text-align: center;" >Valid</button> 
+                                
+                        </div>
+                        </div>
+                    </form>
+                    </div>
+				</div>
+			</div>
+		</div>
+        
+    </div>
+</section>
+{% endblock %}

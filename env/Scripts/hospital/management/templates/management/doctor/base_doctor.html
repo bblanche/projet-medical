@@ -157,26 +157,11 @@
                 <div class="admin-image"> <img src="/static/management/images/avatar_doctor.jpg" alt=""> </div>
                 {% endif %}
          
-                <div class="table-responsive" class="col-sm-12">
-                    <table class="table table-striped">
-                        
-                        <tbody>
-                            <tr>
-                                <th>Username: </th>
-                                <td>{{user.username |upper}}</td>
-                            </tr>
-                            <tr>
-                                <th>Job:</th>
-                                <td>{{work |upper}}</td>
-                            </tr>
-                            <tr>
-                                <th>Department:</th> 
-                                <td>{{user_department |upper}}</td>
-                            </tr>
-                            
-                        </tbody>
-                    </table>
-                </div>
+                <div class="col-md-8 col-sm-8 m-b-0"></div>
+                <span style="color:whitesmoke">username: {{user.username |upper}}</span><br>
+                <span style="color:whitesmoke">Job: {{work |upper}} </span><br>
+                <span style="color:whitesmoke">Department: {{user_department |upper}} </span>
+
                 
                
             {% endif %}

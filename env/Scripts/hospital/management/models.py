@@ -72,6 +72,27 @@ class Departments(models.Model):
             'pk': self.pk
         })
 
+    def get_absolute_url6(self):
+        return reverse('management:payment_motif_admin', kwargs={
+            'pk': self.pk
+        })
+    def get_absolute_url7(self):
+        return reverse('management:department_staff_admin', kwargs={
+            'pk': self.pk
+        })
+    def get_absolute_url8(self):
+        return reverse('management:patient_department_admin', kwargs={
+            'pk': self.pk
+        })
+    def get_absolute_url9(self):
+        return reverse('management:add_motif', kwargs={
+            'pk': self.pk,
+            'pk2': self.pk,
+        })
+   
+
+          
+
 class PrincipalReceptionist(models.Model):
     GENDER = (
         ('MAN', 'MAN'),
@@ -259,6 +280,7 @@ class Patients(models.Model):
         ('WOMAN', 'WOMAN'),
         
     )
+    admin = models.ForeignKey(Admins, on_delete = models.CASCADE, null=True) 
     principal_receptionist = models.ForeignKey(PrincipalReceptionist, on_delete = models.CASCADE, null=True) #ajouté_______________________________________________________________
     #ajouter les principal receptionist
     first_name = models.CharField(max_length = 200, null = True, blank = True)
@@ -300,6 +322,11 @@ class Patients(models.Model):
         return reverse('management:patient_info', kwargs={
             'pk': self.pk
         })
+    def get_absolute_url7(self):
+        return reverse('management:add_patient_department_admin', kwargs={
+            'pk': self.pk
+        })
+        
     
     
 
@@ -333,7 +360,7 @@ class PatientDepartments(models.Model):
 
 
 class Parameters(models.Model):
-    department = models.ForeignKey(Departments, on_delete = models.CASCADE) #Pas besoin. Voir comment supprimer_______________________________________________________________
+    department = models.ForeignKey(Departments, on_delete = models.CASCADE) 
     service_receptionist = models.ForeignKey(ServiceReceptionist, on_delete = models.CASCADE, null = True) #ajouté_______________________________________________________________
     patient = models.ForeignKey(Patients, on_delete = models.CASCADE)
     blood_pressure = models.CharField(max_length = 200, null = True, blank = True)
@@ -376,13 +403,14 @@ class Appointments(models.Model):
         })
     
 class Prescriptions(models.Model):
+    department = models.ForeignKey(Departments, on_delete = models.CASCADE) 
     patient = models.ForeignKey(Patients, on_delete = models.CASCADE)
     doctor = models.ForeignKey(Doctors, on_delete = models.CASCADE)
-    appointment = models.ForeignKey(Appointments, on_delete = models.CASCADE) #ajouté_______________________________________________________________
+    appointment = models.ForeignKey(Appointments, on_delete = models.CASCADE) 
     symptoms = models.TextField(max_length=999999)
-    drug_prescription = models.TextField(max_length=999999, null=True)
-    examinations = models.TextField(max_length=999999, null=True)
-    recommendations = models.TextField(max_length=999999, null=True)
+    drug_prescription = models.TextField(max_length=999999, null=True, blank=True)
+    examinations = models.TextField(max_length=999999, null=True, blank=True)
+    recommendations = models.TextField(max_length=999999, null=True, blank=True)
     prescripted_date = models.DateTimeField(auto_now_add=True)
     
     
@@ -402,11 +430,10 @@ class DoctorsSchedule(models.Model):#________________----------------------à su
         return f"{self.event} {self.date}"
     
 class PaymentMotif(models.Model):
-    payment_motif = models.CharField(max_length = 999999, unique=True)
+    payment_motif = models.CharField(max_length = 9999999999)
     department = models.ForeignKey(Departments, on_delete = models.CASCADE)
-    validity = models.IntegerField(max_length = 999)
-    amount_motif = models.CharField(max_length = 999999)
-    durée_en_jours = models.CharField(max_length = 999999)
+    amount_motif = models.CharField(max_length = 9999999999)
+    duree_en_jours = models.CharField(max_length = 999999)
     def __str__(self):
         return f"{self.payment_motif} {self.department.name} {self.amount_motif}F"
 

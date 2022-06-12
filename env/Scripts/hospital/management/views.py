@@ -26,7 +26,7 @@ def home(request):
     
     try:
         if request.user.pk == ServiceReceptionist.objects.get(user=request.user).user.pk:
-            department = searchDepartment(request, ServiceReceptionist)
+            
             patientCount = PatientDepartments.objects.filter(department = department).count()
             doctorCount = Doctors.objects.filter(department = department).count()
             serviceReceptionistCount = ServiceReceptionist.objects.filter(department = department).count()
@@ -56,7 +56,6 @@ def home(request):
                 'service_receptionist':service_receptionist,
                 'patientCount':patientCount,
                 'serviceReceptionist':service_receptionist,
-                'user_department':department,
                 'youAreActive':youAreActive,
                 'serviceReceptionistCount':serviceReceptionistCount,
                 'doctorCount':doctorCount
@@ -139,7 +138,7 @@ def home(request):
                 try:
                     if request.user.pk == Doctors.objects.get(user=request.user).user.pk:
                         doctor = Doctors.objects.get(user=request.user)
-                        department = searchDepartment(request, Doctors)
+                        
                         patientCount = PatientDepartments.objects.filter(department = department).count()
                         doctorCount = Doctors.objects.filter(department = department).count()
                         serviceReceptionistCount = ServiceReceptionist.objects.filter(department = department).count()
@@ -168,7 +167,6 @@ def home(request):
                             'serviceReceptionistCount':serviceReceptionistCount,
                             'doctorCount':doctorCount,
                             'patientCount':patientCount,
-                            'user_department':department
                         }
                     return render(request, 'management/doctor/profile1.html', context)
                 except Exception as e:
@@ -195,7 +193,17 @@ def home(request):
                         
     return render(request, 'management/index_accueil.html')
 
-
+def pagination(request, list, number, nameOfPageInHTML):
+    paginator = Paginator(list, number)
+    page = request.GET.get(nameOfPageInHTML)
+    try:
+        currentPage = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        currentPage = paginator.page(1)
+    except EmptyPage:
+        currentPage = paginator.page(paginator.num_pages)
+    return currentPage
 
 def patientHasPaid(patient, department):
     validity = datetime.datetime.now()
@@ -375,6 +383,59 @@ def add_cashier(request):
     
     return render(request, 'management/admin/add_cashier.html', context)
 
+def add_admin(request):
+    admin = Admins.objects.get(user=request.user)
+    context = {
+        'admin':admin,
+        'work': "ADMINISTRATOR",
+    }
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        username = request.POST.get('username')
+        date_of_birth = request.POST.get('date_of_birth')
+        gender = request.POST.get('gender')
+        maritalStatus = request.POST.get('marital_status')
+        phone = request.POST.get('phone')
+        email = request.POST.get('email')
+        description = request.POST.get('description')
+        location = request.POST.get('location')
+        profile = request.POST.get('profile')
+        
+        try:
+            with transaction.atomic():
+                automaticPassword="polyclinic"+str(r.randint(0, 99999999)) +username
+                Admins.objects.create(
+                        first_name = first_name,
+                        last_name = last_name,
+                        user = User.objects.create_user(
+                                username = username,
+                                first_name = first_name,
+                                last_name = last_name,
+                                email = email,
+                                password =automaticPassword
+                            ),
+                        phone = phone,
+                        gender = gender,
+                        date_of_birth = date_of_birth,
+                        email = email,
+                        marital_status = maritalStatus,
+                        location = location,
+                        profile = profile,
+                        description = description,
+                        
+                    )
+                message = "Succesfully create.\n The password is " + automaticPassword
+
+            
+        except Exception as e:
+            print(e)
+            message = "Une erreur interne est apparue. Merci de recommencer votre requête."       
+        
+        context['message']=message
+    
+    return render(request, 'management/admin/add_admin.html', context)
+
 def department_info_admin(request):
     admin = Admins.objects.get(user=request.user)
     departments = Departments.objects.all().order_by('name')
@@ -384,6 +445,7 @@ def department_info_admin(request):
         'departments':departments
     }
     return render(request, 'management/admin/department_info.html', context)
+
 
 
 def principalReceptionist_admin(request):
@@ -411,6 +473,19 @@ def cashier_admin(request):
         'paginate': True,
     }
     return render(request, 'management/admin/cashier.html', context)
+
+def admin_admin(request):
+    admin = Admins.objects.get(user=request.user)
+    admin_list = Admins.objects.all()
+    admins = pagination(request, admin_list, 15, 'pageD')
+    
+    context = {
+        'admin':admin,
+        'work': "ADMINISTRATOR",
+        'admins': admins,
+        'paginate': True,
+    }
+    return render(request, 'management/admin/admin.html', context)
 
 def doctor_admin(request):
     admin = Admins.objects.get(user=request.user)
@@ -474,9 +549,11 @@ def patient_department_info(request, pk, pk2):
     admin = Admins.objects.get(user=request.user)
     department = PatientDepartments.objects.get(pk=pk).department
     appointments = Appointments.objects.filter(Q(patient = patient),
+                                                Q(department = department),
                                                 Q(department = department)
                                                 )
     prescriptions = Prescriptions.objects.filter(Q(patient = patient),
+                                                 Q(department = department)
                                                 )
     parameters = Parameters.objects.filter(Q(patient = patient),
                                             Q(service_receptionist__isnull = False),
@@ -495,11 +572,207 @@ def patient_department_info(request, pk, pk2):
         'admin':admin,
         'paginate': True,
         'patient':patient,
-        'patients': patients,
         'work':"ADMINISTRATOR",
     }
     return render(request, 'management/admin/patient_department_info.html', context)
 
+def payment_motif_admin(request, pk):
+    admin = Admins.objects.get(user=request.user)
+    department = Departments.objects.get(pk=pk)
+    paymentMotifs = PaymentMotif.objects.filter(department=department)
+    context = {
+        'admin':admin,
+        'work': "ADMINISTRATOR",
+        'department':department,
+        'paymentMotifs':paymentMotifs
+    }
+    return render(request, 'management/admin/payment_motif_admin.html', context)
+
+
+def department_staff_admin(request, pk):
+    admin = Admins.objects.get(user=request.user)
+    department = Departments.objects.get(pk=pk)
+    serviceReceptionists_list = ServiceReceptionist.objects.filter(department = department)
+    doctors_list = Doctors.objects.filter(department = department)
+    
+    doctors = pagination(request, doctors_list, 15, 'pageD')
+    serviceReceptionists = pagination(request, serviceReceptionists_list, 15, 'pageS')
+    context = {
+        'admin':admin,
+        'work': "ADMINISTRATOR",
+        'department':department,
+        'pk':pk,
+        'paginate': True,
+        'doctors': doctors,
+        'serviceReceptionists': serviceReceptionists,
+        
+    }
+    return render(request, 'management/admin/department_staff_admin.html', context)
+
+def patient_department_admin(request, pk):
+    admin = Admins.objects.get(user=request.user)
+    department = Departments.objects.get(pk=pk)
+    patients_list = PatientDepartments.objects.filter(department = department)#******************************modifier************************************************
+    patients = pagination(request, patients_list, 15, 'pageP')
+    
+    
+    context = {
+        'admin':admin,
+        'work': "ADMINISTRATOR",
+        'department':department,
+        'pk':pk,
+        'paginate': True,
+        'patients': patients,
+        
+    }
+    return render(request, 'management/admin/patient_department_admin.html', context)
+
+def add_motif(request,pk2, pk):
+    admin = Admins.objects.get(user=request.user)
+    context = {
+        'admin':admin,
+        'work': "ADMINISTRATOR",
+        }
+    if request.method == 'POST':
+        department = Departments.objects.get(pk=pk)
+        payment_motif = request.POST.get('payment_motif')
+        duree_en_jours = request.POST.get('duree_en_jours')
+        amount_motif = request.POST.get('amount_motif')
+        try:
+            with transaction.atomic():
+                PaymentMotif.objects.create(  
+                        department = department,
+                        payment_motif = payment_motif, 
+                        duree_en_jours = duree_en_jours,
+                        amount_motif = amount_motif
+                    )
+                message = "Succesfully save"
+        except Exception as e:
+            print(e)
+            message = "Une erreur interne est apparue. Merci de recommencer votre requête."       
+        context['message'] = message
+    return render(request, 'management/admin/add_payment_motif.html', context)      
+
+def add_patient_admin(request):
+    
+    admin = Admins.objects.get(user=request.user)
+    departments = Departments.objects.all()
+    context = {
+        'admin':admin,
+        'work': "ADMINISTRATOR",
+        "departments":departments
+    }
+    
+    if request.method == 'POST':
+        try:
+            with transaction.atomic():
+                depart = Departments.objects.get(id=request.POST.get('department'))  
+                profile = request.POST.get('profile')
+                first_name = request.POST.get('first_name')
+                last_name = request.POST.get('last_name')
+                date_of_birth = request.POST.get('date_of_birth')
+                gender = request.POST.get('gender')
+                maritalStatus = request.POST.get('marital_status')
+                phone = request.POST.get('phone')
+                emergencyPhone = request.POST.get('emergency_phone')
+                email = request.POST.get('email')
+                profession = request.POST.get('profession')
+                location = request.POST.get('location')
+                
+                
+                id_number = r.randint(9999, 1000000)
+                
+                #mettre l'erreur______________________________________________________________________
+                #mettre le cas d'erreur_______________________________________________________________
+                
+                Patients.objects.create(
+                    admin = admin,
+                    first_name = first_name,
+                    last_name = last_name,
+                    phone = phone,
+                    emergency_phone = emergencyPhone,
+                    gender = gender,
+                    date_of_birth = date_of_birth,
+                    email = email,
+                    marital_status = maritalStatus,
+                    location = location,
+                    profession = profession,
+                    profile = profile,
+                    id_number = 'POLYCLINIC' + str(id_number)
+                )
+                PatientDepartments.objects.create(
+                    patient = Patients.objects.get(id_number= 'POLYCLINIC' + str(id_number)),
+                    department = depart
+                )
+                
+                Parameters.objects.create(
+                    
+                    department = depart,
+                    patient = Patients.objects.get(id_number='POLYCLINIC' + str(id_number)),
+                    blood_pressure = 'null',
+                    pulse = 'null',
+                    breathing_rate = 'null',
+                    heart_rate = 'null',
+                    weight = 'null',
+                    height = 'null',
+                    blood_sugar = 'null',
+                    temperature = 'null',
+                    other = 'null',
+                
+                )
+                message = "succesfully add"
+        except Exception as e:
+            print(e)
+            message = "Une erreur interne est apparue. Merci de recommencer votre requête."       
+        context['message'] = message
+
+    #return redirect('management:patient_info')
+    
+    
+    return render(request, 'management/admin/add_patient_admin.html', context)
+
+def add_patient_department_admin(request, pk):#____________________________________________Petit problème: Il faudrait qu'on ne puisse pas augmenter un patient dans un département où il se trouve déjà. Il faut rechercher un moyen de bloquer__________________________________________________________
+    
+    admin = Admins.objects.get(user=request.user)
+    patient=Patients.objects.get(pk=pk)
+    departments = Departments.objects.all()
+    
+    context = {
+        'admin':admin,
+        'work': "ADMINISTRATOR",
+        "departments":departments,
+        "patient":patient,
+    }
+    
+    if request.method == 'POST':
+        depart = Departments.objects.get(id=request.POST.get('department'))  
+        try:
+            with transaction.atomic():
+                PatientDepartments.objects.create(
+                    patient = Patients.objects.get(pk=pk),
+                    department = depart
+                )
+                Parameters.objects.create(
+                    
+                    department = depart,
+                    patient = Patients.objects.get(pk=pk),
+                    blood_pressure = 'null',
+                    pulse = 'null',
+                    breathing_rate = 'null',
+                    heart_rate = 'null',
+                    weight = 'null',
+                    height = 'null',
+                    blood_sugar = 'null',
+                    temperature = 'null',
+                    other = 'null',
+                
+                )
+                message = "succesfully add"
+        except Exception as e:
+            print(e)
+            message = "Une erreur interne est apparue. Merci de recommencer votre requête."       
+        context['message'] = message
+    return render(request, 'management/admin/add_patient_department_admin.html', context)
 
 #***************************************************************************************************************************************************
 
@@ -743,17 +1016,7 @@ def parametres_profile(request, pk):#AJOUTER LES TRANSACTIONS___________________
                 
     return render(request, 'management/serviceReceptionist/parametres-profile.html', context)
 
-def pagination(request, list, number, nameOfPageInHTML):
-    paginator = Paginator(list, number)
-    page = request.GET.get(nameOfPageInHTML)
-    try:
-        currentPage = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        currentPage = paginator.page(1)
-    except EmptyPage:
-        currentPage = paginator.page(paginator.num_pages)
-    return currentPage
+
 
 def schedule(request):
     service_receptionist = ServiceReceptionist.objects.get(user=request.user)
@@ -905,6 +1168,7 @@ def me_principal_receptionist(request):
     
     return render(request, 'management/principalReceptionist/me_principal_receptionist.html', context)
 
+
 def department_add_patients_accueil(request):
     principal_receptionist = PrincipalReceptionist.objects.get(user=request.user)
     youAreActive = verifyActiveOrNot(principal_receptionist)
@@ -998,32 +1262,39 @@ def patients_profile_accueil(request, pk):
     
 
     if request.method == 'POST':
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        date_of_birth = request.POST.get('date_of_birth')
-        gender = request.POST.get('gender')
-        maritalStatus = request.POST.get('marital_status')
-        phone = request.POST.get('phone')
-        emergencyPhone = request.POST.get('emergency_phone')
-        email = request.POST.get('email')
-        #ajouer marital_status, proche_phone, age, location et profession
-        profession = request.POST.get('profession')
-        location = request.POST.get('location')
-        profile = request.POST.get('profile')
+        try:
+            with transaction.atomic():
+                first_name = request.POST.get('first_name')
+                last_name = request.POST.get('last_name')
+                date_of_birth = request.POST.get('date_of_birth')
+                gender = request.POST.get('gender')
+                maritalStatus = request.POST.get('marital_status')
+                phone = request.POST.get('phone')
+                emergencyPhone = request.POST.get('emergency_phone')
+                email = request.POST.get('email')
+                #ajouer marital_status, proche_phone, age, location et profession
+                profession = request.POST.get('profession')
+                location = request.POST.get('location')
+                profile = request.POST.get('profile')
         
     
-        patient.first_name = first_name
-        patient.last_name = last_name
-        patient.phone = phone
-        patient.emergency_phone = emergencyPhone
-        patient.gender = gender
-        patient.date_of_birth = date_of_birth
-        patient.email = email
-        patient.marital_status = maritalStatus
-        patient.location = location
-        patient.profession = profession
-        patient.profile = profile
-        patient.save()
+                patient.first_name = first_name
+                patient.last_name = last_name
+                patient.phone = phone
+                patient.emergency_phone = emergencyPhone
+                patient.gender = gender
+                patient.date_of_birth = date_of_birth
+                patient.email = email
+                patient.marital_status = maritalStatus
+                patient.location = location
+                patient.profession = profession
+                patient.profile = profile
+                patient.save()
+
+        except Exception as e:
+            print(e)
+            message = "Une erreur interne est apparue. Merci de recommencer votre requête."       
+            context['message'] = message
         
        
 

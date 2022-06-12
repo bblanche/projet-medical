@@ -1,1 +1,3 @@
 kennet   -->  polyclinic40603338Kennet
+geena    ---> polyclinic94018969geena  cashier
+neo      ---> polyclinic92796328Neo  admin

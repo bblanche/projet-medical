@@ -98,7 +98,7 @@
                     {% if admin.profile %}
                     <div class="admin-image"><div style="text-align:center ;"><img src="{{admin.profile.url}}" alt="" style="height: 90px; width: 100px; border-radius: 50px; float: left;"></div></div>
                     {% else %}
-                    <div class="admin-image"> <img src="/static/management/images/avatarPrincipalReceptionist.jpg" style="height: 90px; width: 100px; border-radius: 50px; float: left;" alt=""> </div>
+                    <div class="admin-image"> <img src="/static/management/images/admin.jpg" style="height: 90px; width: 100px; border-radius: 50px; float: left;" alt=""> </div>
                     {% endif %}
                     
                         <span style="color:whitesmoke">username: {{user.username |upper}}</span><br>
@@ -119,15 +119,17 @@
                         
                         <li class="active open"><a href="{% url 'management:home' %}"><i class="zmdi zmdi-home"></i><span>Dashboard</span></a></li>    
                         
-                        <li><a href="{% url 'management:department_info' %}"><i class="zmdi zmdi-file-text"></i><span>Add Departments</span></a></li> 
+                        <li><a href="{% url 'management:department_info' %}"><i class="zmdi zmdi-file-text"></i><span>Departments</span></a></li> 
                              
                         <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account-o"></i><span>Staff</span> </a>
                             <ul class="ml-menu">
                                 
-                                <li><a href="{% url 'management:principalReceptionist_admin' %}"><i class="zmdi zmdi-file-text"></i><span>Principal Receptionist</span></a></li> 
+                                <li><a href="{% url 'management:admin_admin' %}"><i class="zmdi zmdi-file-text"></i><span>Administrator</span></a></li> 
                                 <li><a href="{% url 'management:cashier_admin' %}"><i class="zmdi zmdi-file-text"></i><span>Cashier</span></a></li> 
                                 <li><a href="{% url 'management:doctor_admin' %}"><i class="zmdi zmdi-file-text"></i><span>Doctor</span></a></li> 
-                                <li><a href="{% url 'management:service_receptionist_admin' %}"><i class="zmdi zmdi-file-text"></i><span>Nurse</span></a></li>                     
+                                <li><a href="{% url 'management:doctor_admin' %}"><i class="zmdi zmdi-file-text"></i><span>Nurse</span></a></li> 
+                                <li><a href="{% url 'management:principalReceptionist_admin' %}"><i class="zmdi zmdi-file-text"></i><span>Principal Receptionist</span></a></li> 
+                                <li><a href="{% url 'management:service_receptionist_admin' %}"><i class="zmdi zmdi-file-text"></i><span>Service Receptionist</span></a></li>                     
                                                    
                             </ul>
                         </li>

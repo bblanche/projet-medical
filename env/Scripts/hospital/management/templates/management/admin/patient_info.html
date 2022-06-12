@@ -6,7 +6,7 @@
 <section class="content patients" style="min-height: 700px;">
     <div class="container-fluid">
         <div class="block-header" style="text-align: center;">
-            <h2>DEPARTMENT OF {{patient.first_name | upper}} {{patient.last_name | title}} </h2>
+            <h2>DEPARTMENTS OF {{patient.first_name | upper}} {{patient.last_name | title}} </h2>
         </div>
 
         <form style="text-align: center;" action="{% url 'management:doctorAppointments' %}" method="POST">
@@ -17,7 +17,7 @@
             <br>
         </form>
         <div class="fa-3x">
-            <a href="/"><i class="zmdi animated -text-light-blue zmdi-plus-circle zmdi-hc-4x"></i></a> <!-- à modifier__________________________________________________________________-->
+            <a href={{patient.get_absolute_url7}}><i class="zmdi animated -text-light-blue zmdi-plus-circle zmdi-hc-4x"></i></a> <!-- à modifier__________________________________________________________________-->
         </div>
         <br/>
         

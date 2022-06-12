@@ -164,7 +164,7 @@
                                         {% for prescription in prescriptions %}
                                             <tr>
                                                 <td></td>
-                                                <td><span style="text-transform: uppercase;">{{prescription.appointment.department | title}}</span> </td>
+                                                <td><span style="text-transform: uppercase;">{{prescription.department | title}}</span> </td>
                                                 <td>{{prescription.prescripted_date}}</td>
                                                 <td class="txt-oflo"><span>{{prescription.doctor}}</span></td>
                                                 <td class="txt-oflo"><a href="{{prescription.get_absolute_url2}}" style="width:100%;"><button class="btn btn-raised g-bg-cyan" style="width:100%; text-align: center;">View</button></a></td>
