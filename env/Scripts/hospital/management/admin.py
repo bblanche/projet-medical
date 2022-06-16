@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Admins, PaymentMotif, PatientDepartments, Prescriptions, Cashier, PrincipalReceptionist, ServiceReceptionist, Parameters, Departments, Doctors, Patients, Appointments, DoctorsSchedule, Payments
+from .models import Nurse, Admins, PaymentMotif, PatientDepartments, Prescriptions, Cashier, PrincipalReceptionist, ServiceReceptionist, Parameters, Departments, Doctors, Patients, Appointments, DoctorsSchedule, Payments
 # Register your models here.
 
 class AdminAdmin(admin.ModelAdmin):
@@ -11,6 +11,10 @@ class DoctorAdmin(admin.ModelAdmin):
     search_fields = ('first_name', 'last_name', 'department', 'is_active', 'activate_by_admin', 'user' , 'gender', 'marital_status', 'date_of_birth','email','phone','location', 'date_creation')
 
 class ServiceReceptionistAdmin(admin.ModelAdmin):
+    list_display = ['first_name', 'last_name', 'department', 'is_active', 'activate_by_admin', 'user', 'gender', 'marital_status', 'date_of_birth','email','phone','location', 'date_creation' ]
+    search_fields = ('first_name', 'last_name', 'department', 'is_active', 'activate_by_admin', 'user', 'gender', 'marital_status', 'date_of_birth','email','phone','location', 'date_creation')
+
+class NurseAdmin(admin.ModelAdmin):
     list_display = ['first_name', 'last_name', 'department', 'is_active', 'activate_by_admin', 'user', 'gender', 'marital_status', 'date_of_birth','email','phone','location', 'date_creation' ]
     search_fields = ('first_name', 'last_name', 'department', 'is_active', 'activate_by_admin', 'user', 'gender', 'marital_status', 'date_of_birth','email','phone','location', 'date_creation')
 
@@ -42,12 +46,12 @@ class CashierAdmin(admin.ModelAdmin):
 
     
 class PaymentsAdmin(admin.ModelAdmin):
-    list_display = ['cashier', 'patient', 'department', 'motif', 'payment_method']
-    search_fields = ('cashier', 'patient', 'department' 'motif', 'payment_method')
+    list_display = ['cashier', 'patientDepartment', 'motif', 'payment_method', 'valid']
+    search_fields = ('cashier', 'patientDepartment', 'motif', 'payment_method', 'valid')
 
 class PaymentMotifAdmin(admin.ModelAdmin):
-    list_display = ['payment_motif', 'amount_motif','department', 'duree_en_jours']
-    search_fields = ('payment_motif', 'amount_motif','department', 'duree_en_jours')
+    list_display = ['payment_motif', 'amount_motif','department']
+    search_fields = ('payment_motif', 'amount_motif','department')
 
     
 class PrescriptionAdmin(admin.ModelAdmin):
@@ -58,6 +62,7 @@ admin.site.register(Departments)
 admin.site.register(Admins, AdminAdmin)
 admin.site.register(Doctors, DoctorAdmin)
 admin.site.register(ServiceReceptionist, ServiceReceptionistAdmin)
+admin.site.register(Nurse, NurseAdmin)
 admin.site.register(PrincipalReceptionist, PrincipalReceptionnistAdmin)
 admin.site.register(Patients, PatientAdmin)
 admin.site.register(Appointments, AppointmentAdmin)

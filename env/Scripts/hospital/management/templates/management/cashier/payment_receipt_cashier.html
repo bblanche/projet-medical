@@ -61,14 +61,14 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <div class="form-line">
-                                               <input type="text" name="cashier" class="form-control" value="Cashier: {{payment.cashier.first_name}} {{payment.cashier.last_name}}" disabled>
+                                               <input type="text" name="cashier" class="form-control" value="Cashier: {{payment.cashier.first_name | upper}} {{payment.cashier.last_name | title}}" disabled>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" name="department" class="form-control" value="Department: {{payment.department.name}}" disabled>
+                                                <input type="text" name="department" class="form-control" value="Department: {{payment.patientDepartment.department.name}}" disabled>
                                             </div>
                                         </div>
                                     </div>
@@ -78,7 +78,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" name="patient" class="form-control" value="Patient: {{payment.patient.first_name}} {{payment.patient.last_name}}" disabled>
+                                                <input type="text" name="patient" class="form-control" value="Patient: {{payment.patientDepartment.patient.first_name | upper}} {{payment.patientDepartment.patient.last_name | title}}" disabled>
                                             </div>
                                         </div>
                                     </div>
@@ -96,13 +96,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                            <input type="text" name="motif" class="form-control" value="Payment method: {{payment.amount}}" disabled>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <div class="form-line">
@@ -113,7 +107,7 @@
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" name="amount" class="form-control" value="Receipt expiration: {{validity}}" disabled>
+                                                <input type="text" name="amount" class="form-control" value="Receipt expiration: {{payment.valid}}" disabled>
                                             </div>
                                         </div>
                                     </div>

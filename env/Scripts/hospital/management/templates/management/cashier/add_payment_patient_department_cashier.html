@@ -51,6 +51,11 @@
             </div>
             <div class="col-lg-8 col-md-12 col-sm-12">
                 <div class="card">
+                    {% if message == "Successfully paid..." %}
+                    <span style="color: green; text-align: center;">{{message}}</span>
+                    {%else%}
+                    <span style="color: red; text-align: center;">{{message}}</span>
+                    {% endif %}
                     <div class="body"> 
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs" role="tablist">
@@ -118,11 +123,7 @@
                                     <div class="col-sm-12">
                                         <button type="submit" class="btn btn-raised g-bg-cyan">Apply</button>
                                         <button type="submit" class="btn btn-raised">Cancel</button>
-                                        {% if message == "Successfully paid..." %}
-                                        <span style="color: rgb(8, 200, 248); text-align: center;">{{message}}</span>
-                                        {% else %}
-                                        <span style="color: red; text-align: center;">{{message}}</span>
-                                        {% endif %}
+                                        
                                     </div>
                                 </div>
                             </form>

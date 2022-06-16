@@ -32,40 +32,34 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th >Patient's names</th>
                         <th>Motif</th>
+                        <th >Patient</th>
                         <th>Payment_method</th>
                         <th>Cashier</th>
-                        <th>Date of creation</th>
+                        <th>Created date</th>
+                        <th>End date</th>
                     </tr>
                 </thead>
                 <tbody>
                     
-                    {% for department in departments %}
-                    <tr style="border: 1px solid white; border-right: 5px solid #095484;">
-                        <td class="txt-oflo" style="text-align: center; font-style:italic;" colspan="7"><b>{{department.name}} </b>
+                   
+                        {% for payment in payments %}
+                
+                        <tr class="txt-oflo" style=" border: 1px solid white;">
                             
-                                        {% for payment in payments %}
+                                <td></td>
+                                <td><span>{{payment.motif}}</span> </td>
+                                <td ><a href="{{payment.get_absolute_url}}" >{{payment.patientDepartment.patient.first_name | upper}} {{payment.patientDepartment.patient.last_name | title}}</a></span></td>
                                 
-                                        <tr class="txt-oflo" style=" border: 1px solid white;">
-                                            
-                                            {% if payment.department == department %}
-                                                <td></td>
-                                                <td ><a href="{{payment.get_absolute_url}}" >{{payment.patient.first_name}} {{payment.patient.last_name}}</a></span></td>
-                                                <td><span>{{payment.motif}}</span> </td>
-                                                <td ><span>{{payment.payment_method}}</span> </td>
-                                                <td ><span>{{payment.cashier}}</span> </td>
-                                                <td ><span>{{payment.date_creation}}</span> </td>
-                                            
-                                            {% endif %}
-                                        </tr>
-                                        {% endfor %}
-                                    
+                                <td ><span>{{payment.payment_method}}</span> </td>
+                                <td ><span>{{payment.cashier | title}}</span> </td>
+                                <td ><span>{{payment.date_creation}}</span> </td>
+                                <td ><span>{{payment.valid}}</span> </td>
+                                
                             
-                        </td>
-                    </tr>
-                    <tr style=" border-bottom: 5px solid #095484;"></tr>
-                {% endfor %}
+                        </tr>
+                        {% endfor %}
+                                    
                 </tbody>
             </table >
                                        

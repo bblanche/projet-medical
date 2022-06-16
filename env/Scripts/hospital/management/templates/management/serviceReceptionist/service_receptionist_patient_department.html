@@ -38,7 +38,8 @@
                                 <div class="col-md-8 col-sm-8 m-b-0">
                                     <h5 class="m-b-0" >{{patient.department.name | upper}}</h5>
                                     {% if patient.department == user_department%}
-                                        {% if patient.has_paid == True %}
+                                        
+                                        {% if has_paid %}
                                         <span class="label label-success"> Paid </span>
                                         {% else %}
                                         <span style="width: auto; background-color: red;"> Not paid </span>

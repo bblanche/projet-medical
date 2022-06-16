@@ -35,7 +35,7 @@ class Admins(models.Model):
     profile = models.ImageField(null = True, blank = True)
     date_creation = models.DateTimeField(auto_now_add=True)
 
-
+    unique_together = ['first_name', 'last_name']
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
     
@@ -47,7 +47,7 @@ class Admins(models.Model):
 
 class Departments(models.Model):
     admin = models.ForeignKey(Admins, on_delete = models.CASCADE, null=True) 
-    name = models.CharField(max_length = 200)
+    name = models.CharField(max_length = 200, unique=True)
     description = models.TextField(default=" ")
     image = models.ImageField(blank=True, null=True)
     
@@ -89,6 +89,10 @@ class Departments(models.Model):
             'pk': self.pk,
             'pk2': self.pk,
         })
+    def get_absolute_url10(self):
+        return reverse('management:add_patient_department_principal_receptionist', kwargs={
+            'pk': self.pk
+        })
    
 
           
@@ -120,6 +124,7 @@ class PrincipalReceptionist(models.Model):
     profile = models.ImageField(null = True, blank = True)
     date_creation = models.DateTimeField(auto_now_add=True)
 
+    unique_together = ['first_name', 'last_name']
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -156,6 +161,7 @@ class Cashier(models.Model):
     profile = models.ImageField(null = True, blank = True)
     date_creation = models.DateTimeField(auto_now_add=True)
 
+    unique_together = ['first_name', 'last_name']
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -196,6 +202,7 @@ class Doctors(models.Model):
     profile = models.ImageField(null = True, blank = True)
     date_creation = models.DateTimeField(auto_now_add=True)
     
+    unique_together = ['first_name', 'last_name']
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
@@ -257,6 +264,7 @@ class ServiceReceptionist(models.Model):
     profile = models.ImageField(null = True, blank = True)
     date_creation = models.DateTimeField(auto_now_add=True)
     
+    unique_together = ['first_name', 'last_name']
 
 
     def __str__(self):
@@ -267,6 +275,39 @@ class ServiceReceptionist(models.Model):
             'pk': self.pk
         })
 
+
+class Nurse(models.Model):
+    GENDER = (
+        ('MAN', 'MAN'),
+        ('WOMAN', 'WOMAN'),
+        
+    )
+    MARITALSTATUS = (
+        ('SINGLE', 'SINGLE'),
+        ('MARRIED', 'MARRIED'),
+        
+    )
+    admin = models.ForeignKey(Admins, on_delete = models.CASCADE, null=True) 
+    first_name = models.CharField(max_length = 200)
+    last_name = models.CharField(max_length = 200)
+    is_active = BooleanField(default=False) #________________________________________________________________________________________________________________________le docteur va renseigner ici s'il est actif ou pas
+    activate_by_admin = models.BooleanField(default=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    gender = models.CharField(max_length=5, choices=GENDER)
+    marital_status = models.CharField(max_length=8, choices=MARITALSTATUS, default="SINGLE")
+    date_of_birth = models.CharField(max_length = 200)
+    email = models.CharField(max_length = 200)
+    phone = models.CharField(max_length = 200)
+    location = models.CharField(max_length = 230)
+    department = models.ForeignKey(Departments, on_delete = models.CASCADE)
+    description = models.TextField(null = True, blank = True)
+    profile = models.ImageField(null = True, blank = True)
+    date_creation = models.DateTimeField(auto_now_add=True)
+    
+    unique_together = ['first_name', 'last_name']
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
 
 
 class Patients(models.Model):
@@ -296,6 +337,9 @@ class Patients(models.Model):
     profession = models.CharField(max_length = 200, null = True, blank = True)#à remplacer par work ou job
     id_number = models.CharField(max_length = 200, null = True, blank = True)
     date_creation = models.DateTimeField(auto_now_add=True)
+
+    unique_together = ['first_name', 'last_name']
+
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
     
@@ -335,6 +379,9 @@ class PatientDepartments(models.Model):
     patient = models.ForeignKey(Patients, on_delete = models.CASCADE)
     
     has_paid = BooleanField(default=False)
+
+    unique_together = ['department', 'patient']
+
     def get_absolute_url2(self):
        
         return reverse('management:add_payment_patient_department_cashier', kwargs={
@@ -391,6 +438,8 @@ class Appointments(models.Model):
     doctor = models.ForeignKey(Doctors, on_delete = models.CASCADE) #ajouté_______________________________________________________________
     date_creation = models.DateTimeField(auto_now_add=True)
     state = models.CharField(max_length=9999999999, default='Not consulted')
+
+    unique_together = ['date_appointment', 'hour_appointment']
     #def __str__(self):
      #   return f"{self.first_name} {self.last_name}"
     def get_absolute_url(self):
@@ -433,22 +482,23 @@ class PaymentMotif(models.Model):
     payment_motif = models.CharField(max_length = 9999999999)
     department = models.ForeignKey(Departments, on_delete = models.CASCADE)
     amount_motif = models.CharField(max_length = 9999999999)
-    duree_en_jours = models.CharField(max_length = 999999)
+    date_creation = models.DateTimeField(default=datetime.datetime.now())
+    validity = models.CharField(max_length = 9999999999)
+    unique_together = ['payment_motif', 'department']
     def __str__(self):
         return f"{self.payment_motif} {self.department.name} {self.amount_motif}F"
 
 class Payments(models.Model):
     cashier = models.ForeignKey(Cashier, on_delete = models.PROTECT)
-    patient = models.ForeignKey(Patients, on_delete = models.CASCADE)
-    department = models.ForeignKey(Departments, on_delete = models.CASCADE)
+    patientDepartment = models.ForeignKey(PatientDepartments, on_delete = models.CASCADE)
     date_creation = models.DateTimeField(auto_now_add=True)
     motif = models.ForeignKey(PaymentMotif, on_delete = models.PROTECT)
-    validity = models.DateTimeField(default=datetime.datetime.now())
+    valid = models.DateTimeField()
     
     payment_method = models.CharField(max_length = 999999)
     
     def __str__(self):
-        return f"{self.pk} {self.patient}"
+        return f"{self.pk} {self.patientDepartment.patient} {self.patientDepartment.department}"
     
     def get_absolute_url(self):
         return reverse('management:payment_receipt_cashier', kwargs={

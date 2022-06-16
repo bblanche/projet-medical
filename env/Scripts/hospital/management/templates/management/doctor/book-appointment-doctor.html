@@ -45,7 +45,7 @@
                                     <select name="patient" class="form-control show-tick" required>
                                         <option value="">-- Patient --</option>
                                         {%for patient in patients%}
-                                            {% if patient.patient.has_paid %}
+                                            {% if patient.has_paid %}
                                             
                                             
                                             <option value={{patient.patient.pk}}>{{patient.patient.first_name}} {{patient.patient.last_name}}</option>

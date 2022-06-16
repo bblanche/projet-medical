@@ -15,9 +15,7 @@
 <link rel="stylesheet" href="{% static 'management/css/main.css' %}"/>
 <link rel="stylesheet" href="{% static 'management/css/style.css' %}"/>
 <style>
-    th, td, tr {
-      border: 5px solid #095484;
-    }
+    
     
 </style>
 
@@ -129,6 +127,7 @@
                 <li><a href="{% url 'account_login' %}"><i class="zmdi zmdi-file-text"></i><span>Sign in</span></a></li>
                 {% endif %}
                 {% if user.is_authenticated %}
+                {% if not youAreActive %}
                 <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-account-o"></i><span>Me</span> </a>
                     <ul class="ml-menu">
                         <li><a href="{% url 'management:meCashier' %}"><i class="zmdi zmdi-file-text"></i><span>Modify informations</span></a></li>                     
@@ -136,6 +135,7 @@
                     </ul>
                 </li>
                 
+                {% endif %}
                 {% endif %}
 
             </ul>

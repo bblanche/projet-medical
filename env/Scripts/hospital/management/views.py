@@ -9,7 +9,7 @@ from django.db.models.base import Model
 from django.http import HttpResponseServerError
 from django.shortcuts import get_object_or_404, render,redirect
 from django.contrib import messages
-from .models import Admins, Cashier, PaymentMotif, PatientDepartments, Prescriptions, Departments, Doctors, Parameters, Patients, Appointments, Payments, PrincipalReceptionist, ServiceReceptionist
+from .models import Admins, Cashier, Nurse, PaymentMotif, PatientDepartments, Prescriptions, Departments, Doctors, Parameters, Patients, Appointments, Payments, PrincipalReceptionist, ServiceReceptionist
 import random as r
 from django.db.models import Q
 from django.template.loader import get_template
@@ -26,11 +26,12 @@ def home(request):
     
     try:
         if request.user.pk == ServiceReceptionist.objects.get(user=request.user).user.pk:
-            
+            service_receptionist = ServiceReceptionist.objects.get(user=request.user)
+            department = service_receptionist.department
             patientCount = PatientDepartments.objects.filter(department = department).count()
             doctorCount = Doctors.objects.filter(department = department).count()
             serviceReceptionistCount = ServiceReceptionist.objects.filter(department = department).count()
-            service_receptionist = ServiceReceptionist.objects.get(user=request.user)
+            
             
             youAreActive = verifyActiveOrNot(service_receptionist)
                 
@@ -51,6 +52,7 @@ def home(request):
             departments = Departments.objects.all()
             work='Service receptionist'
             context = {
+                'department':department,
                 'departments':departments,
                 'work':work,
                 'service_receptionist':service_receptionist,
@@ -138,7 +140,7 @@ def home(request):
                 try:
                     if request.user.pk == Doctors.objects.get(user=request.user).user.pk:
                         doctor = Doctors.objects.get(user=request.user)
-                        
+                        department = doctor.department
                         patientCount = PatientDepartments.objects.filter(department = department).count()
                         doctorCount = Doctors.objects.filter(department = department).count()
                         serviceReceptionistCount = ServiceReceptionist.objects.filter(department = department).count()
@@ -160,6 +162,7 @@ def home(request):
                         departments = Departments.objects.all()
                         work='Doctor'
                         context = {
+                            'user_department':department,
                             'departments':departments,
                             'work':work,
                             'doctor':doctor,
@@ -190,6 +193,49 @@ def home(request):
                         return render(request, 'management/admin/index_admin.html', context)
                     except Exception as e:
                         print(e)
+                        try:
+                            if request.user.pk == Nurse.objects.get(user=request.user).user.pk:
+                                nurse = Nurse.objects.get(user=request.user)
+                                department = nurse.department
+                                patientCount = PatientDepartments.objects.filter(department = department).count()
+                                doctorCount = Doctors.objects.filter(department = department).count()
+                                serviceReceptionistCount = ServiceReceptionist.objects.filter(department = department).count()
+                                nurseCount = Nurse.objects.filter(department = department).count()
+                                
+                                
+                                youAreActive = verifyActiveOrNot(nurse)
+                                    
+                    
+
+                            if request.method == 'POST':
+                                is_active = request.POST.get('is_active')
+                                
+                                if is_active == "True":
+                                    nurse.is_active=True
+                                    nurse.save()
+                                    youAreActive = True
+                                else:
+                                    nurse.is_active=False
+                                    nurse.save()
+                                    youAreActive = False
+                            
+                                    departments = Departments.objects.all()
+                                    work='Service receptionist'
+                                    context = {
+                                        'department':department,
+                                        'departments':departments,
+                                        'work':work,
+                                        'service_receptionist':service_receptionist,
+                                        'patientCount':patientCount,
+                                        'nurse':nurse,
+                                        'youAreActive':youAreActive,
+                                        'serviceReceptionistCount':serviceReceptionistCount,
+                                        'doctorCount':doctorCount,
+                                        'nurseCount':nurseCount
+                                    }
+                            return render(request, 'management/admin/index_nurse.html', context)
+                        except Exception as e:
+                            print(e)
                         
     return render(request, 'management/index_accueil.html')
 
@@ -205,14 +251,25 @@ def pagination(request, list, number, nameOfPageInHTML):
         currentPage = paginator.page(paginator.num_pages)
     return currentPage
 
-def patientHasPaid(patient, department):
-    validity = datetime.datetime.now()
-    payments = Payments.objects.filter(Q(patient = patient), Q(department = department))
+def patientHasPaidAdmin(patientDepartment):
+    thisDay = datetime.datetime.now().date()
+    payments = Payments.objects.filter(Q(patientDepartment = patientDepartment))
     for payment in payments:
-        if payment.validity == validity:
+        if payment.valid.date() > thisDay:
             return True
         else: 
             return False 
+
+def patientHasPaid(patient, department):
+    patientDepartment = PatientDepartments.objects.get(Q(patient = patient),
+                                                        Q(department = department))
+    thisDay = datetime.datetime.now().date()
+    payments = Payments.objects.filter(Q(patientDepartment = patientDepartment))
+    for payment in payments:
+        if payment.valid.date() > thisDay:
+            return True
+        else: 
+            return False
 
 #****************************************VUES LIES A L'ADMIN********************************************************#
 def department_add_department(request):
@@ -371,6 +428,20 @@ def add_service_receptionist(request):
     
     return render(request, 'management/admin/add_service_receptionist.html', context)
 
+def add_nurse(request):
+    admin = Admins.objects.get(user=request.user)
+    departments = Departments.objects.all()
+    context = {
+        'admin':admin,
+        'work': "ADMINISTRATOR",
+        'departments':departments
+    }
+    if request.method == 'POST':
+        context['message'] = add_staff(request, admin, Nurse)
+        #return redirect('management:home')
+    
+    return render(request, 'management/admin/add_nurse.html', context)
+
 def add_cashier(request):
     admin = Admins.objects.get(user=request.user)
     context = {
@@ -451,7 +522,7 @@ def department_info_admin(request):
 def principalReceptionist_admin(request):
     admin = Admins.objects.get(user=request.user)
     principal_receptionist_list = PrincipalReceptionist.objects.all()
-    principal_receptionists = pagination(request, principal_receptionist_list, 15, 'pageD')
+    principal_receptionists = pagination(request, principal_receptionist_list, 30, 'pageD')
     
     context = {
         'admin':admin,
@@ -464,7 +535,7 @@ def principalReceptionist_admin(request):
 def cashier_admin(request):
     admin = Admins.objects.get(user=request.user)
     cashier_list = Cashier.objects.all()
-    cashiers = pagination(request, cashier_list, 15, 'pageD')
+    cashiers = pagination(request, cashier_list, 30, 'pageD')
     
     context = {
         'admin':admin,
@@ -477,7 +548,7 @@ def cashier_admin(request):
 def admin_admin(request):
     admin = Admins.objects.get(user=request.user)
     admin_list = Admins.objects.all()
-    admins = pagination(request, admin_list, 15, 'pageD')
+    admins = pagination(request, admin_list, 30, 'pageD')
     
     context = {
         'admin':admin,
@@ -490,7 +561,7 @@ def admin_admin(request):
 def doctor_admin(request):
     admin = Admins.objects.get(user=request.user)
     doctor_list = Doctors.objects.all().order_by('department')
-    doctors = pagination(request, doctor_list, 15, 'pageD')
+    doctors = pagination(request, doctor_list, 30, 'pageD')
     
     context = {
         'admin':admin,
@@ -503,7 +574,7 @@ def doctor_admin(request):
 def service_receptionist_admin(request):
     admin = Admins.objects.get(user=request.user)
     service_receptionist_list = ServiceReceptionist.objects.all().order_by('department')
-    service_receptionists = pagination(request, service_receptionist_list, 15, 'pageD')
+    service_receptionists = pagination(request, service_receptionist_list, 30, 'pageD')
     
     context = {
         'admin':admin,
@@ -513,10 +584,23 @@ def service_receptionist_admin(request):
     }
     return render(request, 'management/admin/service_receptionist.html', context)
 
+def nurse_admin(request):
+    admin = Admins.objects.get(user=request.user)
+    nurse_list = Nurse.objects.all().order_by('department')
+    nurses = pagination(request, nurse_list, 30, 'pageD')
+    
+    context = {
+        'admin':admin,
+        'work': "ADMINISTRATOR",
+        'nurses':nurses,
+        'paginate': True,
+    }
+    return render(request, 'management/admin/nurse.html', context)
+
 def patient_admin(request):
     admin = Admins.objects.get(user=request.user)
     patients_list = Patients.objects.all().order_by('date_creation','first_name', 'last_name')
-    patients = pagination(request, patients_list, 15, 'pageP')
+    patients = pagination(request, patients_list, 30, 'pageP')
     
     context = {
         'admin':admin,
@@ -530,7 +614,7 @@ def patient_info(request, pk):
     admin = Admins.objects.get(user=request.user)
     patient=Patients.objects.get(pk=pk)
     patients_list = PatientDepartments.objects.filter(patient=Patients.objects.get(pk=pk)).order_by('department')
-    patients = pagination(request, patients_list, 15, 'pageP')
+    patients = pagination(request, patients_list, 30, 'pageP')
     
     context = {
         'admin':admin,
@@ -595,8 +679,8 @@ def department_staff_admin(request, pk):
     serviceReceptionists_list = ServiceReceptionist.objects.filter(department = department)
     doctors_list = Doctors.objects.filter(department = department)
     
-    doctors = pagination(request, doctors_list, 15, 'pageD')
-    serviceReceptionists = pagination(request, serviceReceptionists_list, 15, 'pageS')
+    doctors = pagination(request, doctors_list, 30, 'pageD')
+    serviceReceptionists = pagination(request, serviceReceptionists_list, 30, 'pageS')
     context = {
         'admin':admin,
         'work': "ADMINISTRATOR",
@@ -613,7 +697,7 @@ def patient_department_admin(request, pk):
     admin = Admins.objects.get(user=request.user)
     department = Departments.objects.get(pk=pk)
     patients_list = PatientDepartments.objects.filter(department = department)#******************************modifier************************************************
-    patients = pagination(request, patients_list, 15, 'pageP')
+    patients = pagination(request, patients_list, 30, 'pageP')
     
     
     context = {
@@ -636,14 +720,14 @@ def add_motif(request,pk2, pk):
     if request.method == 'POST':
         department = Departments.objects.get(pk=pk)
         payment_motif = request.POST.get('payment_motif')
-        duree_en_jours = request.POST.get('duree_en_jours')
+        validity = request.POST.get('validity')
         amount_motif = request.POST.get('amount_motif')
         try:
             with transaction.atomic():
                 PaymentMotif.objects.create(  
                         department = department,
                         payment_motif = payment_motif, 
-                        duree_en_jours = duree_en_jours,
+                        validity = validity,
                         amount_motif = amount_motif
                     )
                 message = "Succesfully save"
@@ -955,6 +1039,7 @@ def patients(request):
     youAreActive = verifyActiveOrNot(service_receptionist)
     patients = PatientDepartments.objects.filter(department = service_receptionist.department)
     parameters = Parameters.objects.all()
+    
     context = {
         'parameters': parameters,
         'service_receptionist': service_receptionist,
@@ -1024,8 +1109,8 @@ def schedule(request):
     department = searchDepartment(request, ServiceReceptionist)
     appointments_list = Appointments.objects.filter(service_receptionist = service_receptionist).order_by('-state', 'date_appointment', 'hour_appointment')
     allAppointments_list = Appointments.objects.filter(department = department).order_by('-state', 'date_appointment')
-    allAppointments = pagination(request, allAppointments_list, 15, 'pageAll')
-    appointments = pagination(request, appointments_list, 15, 'page')
+    allAppointments = pagination(request, allAppointments_list, 30, 'pageAll')
+    appointments = pagination(request, appointments_list, 30, 'page')
 
     context = {
         'allAppointments': allAppointments,
@@ -1087,14 +1172,17 @@ def patient_department_service_receptionist(request, pk):
     youAreActive = verifyActiveOrNot(serviceReceptionist)
     patient=Patients.objects.get(pk=pk)
     patients_list = PatientDepartments.objects.filter(patient=patient).order_by('department')
-    patients = pagination(request, patients_list, 15, 'pageP')
-    
+    patients = pagination(request, patients_list, 30, 'pageP')
+    user_department = searchDepartment(request, ServiceReceptionist)
+    has_paid = patientHasPaid(patient, user_department)
+
     context = {
         'serviceReceptionist':serviceReceptionist,
         'patient':patient,
         'paginate': True,
         'patients': patients,
-        'user_department':searchDepartment(request, ServiceReceptionist),
+        'has_paid':has_paid,
+        'user_department': user_department,
         'youAreActive':youAreActive,
         'work':'Doctor'
     }
@@ -1246,7 +1334,7 @@ def department_add_patients_accueil(request):
 
     
     
-    return render(request, 'management/principalReceptionist/department_add_patients.html', context)
+    return render(request, 'management/principalReceptionist/add_patients.html', context)
 
 def patients_profile_accueil(request, pk):
     principal_receptionist = PrincipalReceptionist.objects.get(user=request.user)
@@ -1307,8 +1395,8 @@ def departmentPrincipalReceptionist(request, pk):
     serviceReceptionists_list = ServiceReceptionist.objects.filter(department = department)
     doctors_list = Doctors.objects.filter(department = department)
     youAreActive = verifyActiveOrNot(principal_receptionist)
-    doctors = pagination(request, doctors_list, 15, 'pageD')
-    serviceReceptionists = pagination(request, serviceReceptionists_list, 15, 'pageS')
+    doctors = pagination(request, doctors_list, 30, 'pageD')
+    serviceReceptionists = pagination(request, serviceReceptionists_list, 30, 'pageS')
     context = {
         'principal_receptionist': principal_receptionist,
         'department':department,
@@ -1325,7 +1413,7 @@ def patientDepartmentPrincipalReceptionist(request, pk):
     principal_receptionist = PrincipalReceptionist.objects.get(user=request.user)
     department = Departments.objects.get(pk=pk)
     patients_list = PatientDepartments.objects.filter(department = department)#******************************modifier************************************************
-    patients = pagination(request, patients_list, 15, 'pageP')
+    patients = pagination(request, patients_list, 30, 'pageP')
     youAreActive = verifyActiveOrNot(principal_receptionist)
     
     context = {
@@ -1338,6 +1426,70 @@ def patientDepartmentPrincipalReceptionist(request, pk):
         'work':"Principal receptionist",
     }
     return render(request, 'management/principalReceptionist/patient_department_principal_receptionist.html', context)
+
+def patientPrincipalReceptionist(request):
+    principal_receptionist = PrincipalReceptionist.objects.get(user=request.user)
+    patients_list = PatientDepartments.objects.all()
+    patients = pagination(request, patients_list, 30, 'pageP')
+    youAreActive = verifyActiveOrNot(principal_receptionist)
+    
+    context = {
+        'principal_receptionist': principal_receptionist,
+        'paginate': True,
+        'patients': patients,
+        'youAreActive':youAreActive,
+        'work':"Principal receptionist",
+    }
+    return render(request, 'management/principalReceptionist/patients_principal_receptionist.html', context)
+
+def add_patient_department_principal_receptionist(request, pk):#____________________________________________Petit problème: Il faudrait qu'on ne puisse pas augmenter un patient dans un département où il se trouve déjà. Il faut rechercher un moyen de bloquer__________________________________________________________
+    
+    principal_receptionist = PrincipalReceptionist.objects.get(user=request.user)
+    youAreActive = verifyActiveOrNot(principal_receptionist)
+    department = Departments.objects.get(pk=pk)
+    #PatientDepartment = PatientDepartments.objects.exclude(department = department)
+    patients=Patients.objects.all()
+    departments = Departments.objects.exclude(pk = pk)
+    
+    context = {
+        'department':department,
+        'patients':patients,
+        'principal_receptionist': principal_receptionist,
+        'work':"Principal receptionist",
+        "departments":departments,
+        'youAreActive':youAreActive
+    }
+    
+    if request.method == 'POST':#pas bon du tout et pas utilisé. J'ai commenté dans son template-----------------------------------------------------------------------------
+        depart = Departments.objects.get(id=request.POST.get('department'))
+        patientPk = Departments.objects.get(id=request.POST.get('patient'))  
+        try:
+            with transaction.atomic():
+                PatientDepartments.objects.create(
+                    patient = Patients.objects.get(pk=patientPk),
+                    department = depart
+                )
+                Parameters.objects.create(
+                    
+                    department = depart,
+                    patient = Patients.objects.get(pk=patientPk),
+                    blood_pressure = 'null',
+                    pulse = 'null',
+                    breathing_rate = 'null',
+                    heart_rate = 'null',
+                    weight = 'null',
+                    height = 'null',
+                    blood_sugar = 'null',
+                    temperature = 'null',
+                    other = 'null',
+                
+                )
+                message = "succesfully add"
+        except Exception as e:
+            print(e)
+            message = "Une erreur interne est apparue. Merci de recommencer votre requête."       
+        context['message'] = message
+    return render(request, 'management/principalReceptionist/add_patient_department.html', context)
 
 #****************************************FIN VUES LIES A LA RECEPTIONNISTE PRINCIPALE*********************************************************#
 
@@ -1395,6 +1547,15 @@ def addPaymentPatientDepartmentCashier(request, pk):
     
     motifs = PaymentMotif.objects.filter(department = patient.department)
     
+    context = {
+        'pk':pk,
+        'cashier':cashier,
+         'department': department,
+        'patient': patient,
+        'motifs': motifs,
+        'youAreActive':youAreActive,
+        'work':"Cashier",
+    }
     if request.method == 'POST':
         try:
             with transaction.atomic():
@@ -1403,52 +1564,30 @@ def addPaymentPatientDepartmentCashier(request, pk):
                 
                 
                 Payments.objects.create(  
-                    patient = patient.patient,
-                    department = department,#*************problème*********************************************************************************************
+                    patientDepartment = patient,
                     cashier = cashier,
                     motif = motif,
                     payment_method = payment_method,
-                    validity =  datetime.datetime.now().date() + datetime.timedelta(days=motif.validity)  
+                    valid =  datetime.datetime.now().date() + datetime.timedelta(days=int(motif.validity))  
                 )
-                patient.has_paid=True
-                patient.save()
-                context = {
-                'pk':pk,
-                'cashier':cashier,
-                'department': department,#*************problème*********************************************************************************************
-                'patient': patient,
-                'motifs': motifs,
-                'message':"Successfully paid...",
-                'youAreActive': youAreActive,
-                'work':"Cashier"
-                }
+                
+                context['message'] = "Successfully paid..."
         except Exception as e:
             print(e)
-    
+            message = "Une erreur interne est apparue. Merci de recommencer votre requête."
+            context['message'] = message
         return render(request, 'management/cashier/add_payment_patient_department_cashier.html', context)   
          
-    context = {
-        'pk':pk,
-        'cashier':cashier,
-        'department': department,
-        'patient': patient,
-        'motifs': motifs,
-        'youAreActive':youAreActive,
-        'work':"Cashier",
-    }
+    
     return render(request,'management/cashier/add_payment_patient_department_cashier.html', context )
 
 def paymentSortedByDepartmentCashier(request):
     cashier = Cashier.objects.get(user=request.user)
     youAreActive = verifyActiveOrNot(cashier)
-    departments = Departments.objects.all().order_by('name')
-    patients = Patients.objects.all()
-    payments = Payments.objects.all()
+    payments = Payments.objects.all().order_by('motif')
     context = {
         'cashier': cashier,
-        'departments':departments,
         'payments':payments,
-        'patients': patients,
         'youAreActive':youAreActive,
         'work':"Cashier",
     }
@@ -1458,7 +1597,7 @@ def paymentReceiptCashier(request, pk):
     cashier = Cashier.objects.get(user=request.user)
     youAreActive = verifyActiveOrNot(cashier)
     payment = Payments.objects.get(pk=pk)
-    patient = payment.patient
+    patient = payment.patientDepartment.patient
     message = "Successfully paid..."
     context = {
         'cashier': cashier,
@@ -1466,7 +1605,6 @@ def paymentReceiptCashier(request, pk):
         'message': message,
         'youAreActive':youAreActive,
         'patient':patient,
-        'validity': (payment.date_creation.date() + datetime.timedelta(days=14)).__str__(),
         'work':"Cashier",
     }
     return render(request, 'management/cashier/payment_receipt_cashier.html', context)
@@ -1537,7 +1675,7 @@ def doctor_appointments(request):
     
     doctor = Doctors.objects.get(user=request.user)
     appointments_list = Appointments.objects.filter(doctor=doctor).order_by('-state', 'date_appointment', 'hour_appointment')
-    appointments = pagination(request, appointments_list, 15, 'page')
+    appointments = pagination(request, appointments_list, 30, 'page')
 
     youAreActive = verifyActiveOrNot(doctor)
     context = {
@@ -1654,14 +1792,17 @@ def patient_department_doctor(request, pk):
     youAreActive = verifyActiveOrNot(doctor)
     patient=Patients.objects.get(pk=pk)
     patients_list = PatientDepartments.objects.filter(patient=patient).order_by('department')
-    patients = pagination(request, patients_list, 15, 'pageP')
-    
+    patients = pagination(request, patients_list, 30, 'pageP')
+    user_department = searchDepartment(request, Doctors)
+    has_paid = patientHasPaid(patient, user_department)
+
     context = {
         'doctor':doctor,
         'patient':patient,
         'paginate': True,
         'patients': patients,
-        'user_department':searchDepartment(request, Doctors),
+        'has_paid':has_paid,
+        'user_department':user_department,
         'youAreActive':youAreActive,
         'work':'Doctor'
     }

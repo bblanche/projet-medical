@@ -104,7 +104,7 @@
         <div class="user-info">
             
             {% if user.is_authenticated %}
-                {% if service_receptionist.profile %}
+                {% if nurse.profile %}
                 <div class="admin-image"><img src="{{service_receptionist.profile.url}}" alt="" ></div>
                 {% else %}
                 <div class="admin-image"> <img src="/static/management/images/service.jpg" alt=""> </div>
@@ -146,12 +146,7 @@
                     
                     
                     
-                    <li><a href="javascript:void(0);" class="menu-toggle"><i class="zmdi zmdi-calendar-check"></i><span>Appointments</span> </a>
-                        <ul class="ml-menu">
-                            <li><a href="{% url 'management:schedule' %}">Appointments list</a></li>
-                            <li><a href="{% url 'management:appointment' %}">Book Appointment</a></li>
-                        </ul>
-                    </li>
+                    
                     <li><a href="{% url 'management:department_doctors' %}"><i class="zmdi zmdi-account-o"></i><span>Department's doctors</span> </a></li>
                     <!--li><a href="{% url 'management:department_receptionist' %}"><i class="zmdi zmdi-account-o"></i><span>Department's receptionist</span> </a></li-->
                     <li><a href="{% url 'management:department_patients' %}"><i class="zmdi zmdi-account-o"></i><span>Department's Patients</span> </a></li>

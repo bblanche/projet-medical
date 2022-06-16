@@ -3,10 +3,10 @@
 
 {% block body %}
 
-<section class="content">
+<section class="content minheightcontent">
     <div class="container-fluid">
         <div class="block-header">
-            <h2>{{department.name}}</h2>
+            <h2>{{department.name | title}}</h2>
             <small class="text-muted">Welcome to POLYCLINIC application</small>
         </div>
         <form style="text-align: center;" action="" method="POST">
@@ -37,7 +37,11 @@
                         </ul>
                     </div>
                     <div class="body">
-                        <h3 style="text-transform: uppercase; text-align: center;">ALL {{department.name}} PATIENTS</h3>
+                        <h3 style=" text-align: center;">ALL {{department.name | upper}} PATIENTS</h3>
+                        <!--div class="fa-3x">
+                            <a href="{{department.get_absolute_url10}}"><i class="zmdi animated -text-light-blue zmdi-plus-circle zmdi-hc-4x"></i></a>
+                        </div>
+                        <br/-->
                         <div class="table-responsive">
                             
                                             <table class="table table-striped">
@@ -60,14 +64,14 @@
                                                     {% for patient in patients %}
                                                     <tr>
                                                         <td></td>
-                                                        <td class="txt-oflo"><a href="{{patient.patient.get_absolute_url}}" style="width:100%;">{{patient.patient.first_name}} {{patient.patient.last_name}}</a></td>
+                                                        <td class="txt-oflo"><a href="{{patient.patient.get_absolute_url}}" style="width:100%;">{{patient.patient.first_name | upper}} {{patient.patient.last_name | title}}</a></td>
                                                         <td><span>{{patient.patient.phone}}</span> </td>
                                                         <td class="txt-oflo">{{patient.patient.emergency_phone}}</td>
                                                         <td class="txt-oflo">{{patient.patient.email}}</td>
-                                                        <td class="txt-oflo">{{patient.patient.gender}}</td>
+                                                        <td class="txt-oflo">{{patient.patient.gender | title}}</td>
                                                         <td class="txt-oflo">{{patient.patient.marital_status}}</td>
                                                         <td class="txt-oflo">{{patient.patient.date_of_birth}}</td>
-                                                        <td class="txt-oflo">{{patient.patient.profession}}</td>
+                                                        <td class="txt-oflo">{{patient.patient.profession | title}}</td>
                                                         <td class="txt-oflo">{{patient.patient.date_creation}}</td>
                                                     </tr>
                                                     {% endfor %}

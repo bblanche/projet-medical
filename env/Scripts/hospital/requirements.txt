@@ -26,4 +26,4 @@ six==1.16.0
 sqlparse==0.4.2
 urllib3==1.26.7
 webencodings==0.5.1
-xhtml2pdf==0.2.5
+xhtml2pdf==0.2.5 #pas necessaire

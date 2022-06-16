@@ -1,0 +1,82 @@
+{% extends "management/Nurse/base_nurse.html" %} 
+
+
+{% load static %} 
+
+{% block body %}
+
+<section class="content home" style="min-height: 700px;">
+    
+    <div class="container-fluid">
+        <div class="block-header">
+            <h4 class="mb-0"><strong>Welcome {{nurse.first_name}} {{nurse.last_name}}</strong></h4>
+            <small class="text-muted">Welcome to POLYCLINIC application</small>
+        </div>
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12" >
+                <div class="hover-zoom-effect" style="text-align: center; min-height: 200px;">
+                    
+                    <div class="content">
+                        <div class="text"><span style="color: rgba(20, 156, 247, 0.904); font-size: 300%; text-align: center;">All Department Doctors</span></div>
+                        <div class="number"><span style="color: rgba(20, 156, 247, 0.904); font-size: 300%; text-align: center;">{{doctorCount}}</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12" >
+                <div class="hover-zoom-effect" style="text-align: center; min-height: 200px;">
+                    <div class="content">
+                        <div class="text"><span style="color: rgba(20, 156, 247, 0.904); font-size: 300%; text-align: center;"> Department Receptionists</span></div>
+                        <div class="number"><span style="color: rgba(20, 156, 247, 0.904); font-size: 300%; text-align: center;">{{serviceReceptionistCount}}</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12" >
+                <div class="hover-zoom-effect" style="text-align: center; min-height: 200px;">
+                    <div class="content">
+                        <div class="text"><span style="color: rgba(20, 156, 247, 0.904); font-size: 300%; text-align: center;"> Department Nurse</span></div>
+                        <div class="number"><span style="color: rgba(20, 156, 247, 0.904); font-size: 300%; text-align: center;">{{nurseCount}}</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12" >
+                <div class="hover-zoom-effect" style="text-align: center; min-height: 200px;">
+                    
+                    <div class="content">
+                        <div class="text"><span style="color: rgba(20, 156, 247, 0.904); font-size: 300%; text-align: center;">All Department Patients</span></div>
+                        <div class="number"><span style="color: rgba(20, 156, 247, 0.904); font-size: 300%; text-align: center;">{{patientCount}}</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>    
+            <!--div class="col-lg-3 col-md-3 col-sm-6">
+                <div class="info-box-4 hover-zoom-effect">
+                    <div class="icon"> <i class="zmdi zmdi-account col-green"></i> </div>
+                    <div class="content">
+                        <div class="text">OPD Patient</div>
+                        <div class="number">00</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6">
+                <div class="info-box-4 hover-zoom-effect">
+                    <div class="icon"> <i class="zmdi zmdi-bug col-blush"></i> </div>
+                    <div class="content">
+                        <div class="text">Today's Operations</div>
+                        <div class="number">00</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6">
+                <div class="info-box-4 hover-zoom-effect">
+                    <div class="icon"> <i class="zmdi zmdi-balance col-cyan"></i> </div>
+                    <div class="content">
+                        <div class="text">Hospital Earning</div>
+                        <div class="number">$0.0</div>
+                    </div>
+                </div>
+            </div-->
+	</div>
+</section>
+
+{% endblock %}
+
