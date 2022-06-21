@@ -353,6 +353,10 @@ class Patients(models.Model):
         return reverse('management:parametres_profile', kwargs={
             'pk': self.pk
         })
+    def get_absolute_url8(self):
+        return reverse('management:patient_department_nurse', kwargs={
+            'pk': self.pk
+        })
 
     def get_absolute_url4(self):
         return reverse('management:patient_department_service_receptionist', kwargs={
@@ -403,12 +407,17 @@ class PatientDepartments(models.Model):
             'pk': self.pk,
             'pk2':self.patient.pk,
         })
+    def get_absolute_url6(self):
+        return reverse('management:other_profile_nurse', kwargs={
+            'pk': self.pk,
+            'pk2':self.patient.pk,
+        })
     
 
 
 class Parameters(models.Model):
     department = models.ForeignKey(Departments, on_delete = models.CASCADE) 
-    service_receptionist = models.ForeignKey(ServiceReceptionist, on_delete = models.CASCADE, null = True) #ajouté_______________________________________________________________
+    nurse = models.ForeignKey(Nurse, on_delete = models.CASCADE, null = True) #ajouté_______________________________________________________________
     patient = models.ForeignKey(Patients, on_delete = models.CASCADE)
     blood_pressure = models.CharField(max_length = 200, null = True, blank = True)
     pulse = models.CharField(max_length = 200, null = True, blank = True)
@@ -487,7 +496,12 @@ class PaymentMotif(models.Model):
     unique_together = ['payment_motif', 'department']
     def __str__(self):
         return f"{self.payment_motif} {self.department.name} {self.amount_motif}F"
-
+    def get_absolute_url(self):
+        return reverse('management:modify_motif', kwargs={
+            'pk3': self.pk,
+            'pk': self.department.pk
+        })
+    
 class Payments(models.Model):
     cashier = models.ForeignKey(Cashier, on_delete = models.PROTECT)
     patientDepartment = models.ForeignKey(PatientDepartments, on_delete = models.CASCADE)

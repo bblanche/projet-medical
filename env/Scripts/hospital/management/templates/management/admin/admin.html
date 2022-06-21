@@ -38,10 +38,14 @@
                         
                         
                         <div class="fa-3x">
-                            <a href="{% url 'management:add_admin' %}"><i class="zmdi animated -text-light-blue zmdi-plus-circle zmdi-hc-4x"></i></a>
+                            <a href="{% url 'management:add_admin' %}" title="add admin"><i class="zmdi animated -text-light-blue zmdi-plus-circle zmdi-hc-4x"></i></a>
                         </div>
 
-                          
+                        {% if message == "Succesfully delete" %}
+                        <h5 class="messagedone" style="text-align: center;">{{message}}</h5> 
+                        {% else %}
+                            <h5 class="txt-oflo" style="color: red; text-align: center;">{{message}}</h5>
+                        {% endif %}
                         <div class="table-responsive">
                             <table class="table table-striped">
                                 <thead>
@@ -68,7 +72,26 @@
                                         {% else %}
                                         <td class="txt-oflo">{{admin.is_active}}</span></td>
                                         {% endif %}
-                                        <td><i class="zmdi zmdi-delete"></i></td>
+                                        <td><a title="delete admin"> <i class="zmdi zmdi-delete" onclick="javascript:toggleVisibility('{{admin.pk}}');"></i></a>
+                                            <div id="{{admin.pk}}" style="display:none;">
+                                                <form method="post" action="{% url 'management:admin_admin' %}">
+                                                    {% csrf_token %}
+                                                    <div class="col-sm-3"></div>
+                                                        <div class="form-group">
+                                                            <div class="form-line"> <strong>Are you sure ?</strong>
+                                                                <select name="staff" class="form-control show-tick" required>
+                                                                    <option value={{admin.pk}}>YES</option>
+                                                                    <option>NO</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    
+                                                        <button type="submit" class="btn btn-raised g-bg-cyan">Valid</button> 
+                                                        
+                                                <a style="width:100%;"><span class="btn btn-raised g-bg-cyan" onclick="javascript:toggleVisibility('{{admin.pk}}');">Cancel</span></a>
+                                                </form>
+                                            </div>
+                                        </td>
                                     </tr>
                                     {% endfor %}
                                 

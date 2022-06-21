@@ -1,4 +1,4 @@
-﻿{% extends "management/serviceReceptionist/base.html" %} 
+﻿{% extends "management/nurse/base_nurse.html" %} 
 {% load static %} 
 
 {% block body %}
@@ -6,7 +6,7 @@
 <section class="content patients" style="min-height: 700px;">
     <div class="container-fluid">
         <div class="block-header">
-            <h2>All <span style="text-transform: lowercase;">{{user_department.name}}</span> patients</h2>
+            <h2>All <span style="text-transform: lowercase;">{{user_department.name | title}}</span> patients</h2>
         </div>
 
         <form style="text-align: center;" action="{% url 'management:doctorAppointments' %}" method="POST">
@@ -42,7 +42,8 @@
                                     </div>
                                      
                                     <div id="{{patient.id}}" style="display:none;">
-                                        <a href="{{patient.patient.get_absolute_url4}}" style="width:100%;"><button class="btn btn-raised g-bg-cyan" style="width:100%; text-align: center;">Patient Informations</button></a>
+                                        <a href="{{patient.patient.get_absolute_url3}}" style="width:100%;"><button class="btn btn-raised g-bg-cyan" style="width:100%; text-align: center;">Add Parameters</button></a>
+                                        <a href="{{patient.patient.get_absolute_url8}}" style="width:100%;"><button class="btn btn-raised g-bg-cyan" style="width:100%; text-align: center;">Patient Informations</button></a>
                                     </div>
                             </div>
                         </div>

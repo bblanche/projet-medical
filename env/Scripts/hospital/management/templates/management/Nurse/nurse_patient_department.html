@@ -1,4 +1,4 @@
-{% extends "management/admin/base_admin.html" %}
+{% extends "management/nurse/base_nurse.html" %}
 {% load static %}
 
 {% block body %}
@@ -6,7 +6,7 @@
 <section class="content patients" style="min-height: 700px;">
     <div class="container-fluid">
         <div class="block-header" style="text-align: center;">
-            <h2>DEPARTMENTS OF {{patient.first_name | upper}} {{patient.last_name | title}} </h2>
+            <h2>DEPARTMENT OF {{patient.first_name | upper}} {{patient.last_name | title}} </h2>
         </div>
 
         <form style="text-align: center;" action="{% url 'management:doctorAppointments' %}" method="POST">
@@ -16,10 +16,7 @@
             <button>🔍</button>
             <br>
         </form>
-        <div class="fa-3x">
-            <a href={{patient.get_absolute_url7}} title="add department for this patient"><i class="zmdi animated -text-light-blue zmdi-plus-circle zmdi-hc-4x"></i></a> <!-- à modifier__________________________________________________________________-->
-        </div>
-        <br/>
+        
         
         <div class="row clearfix">
             {% for patient in patients %}
@@ -33,19 +30,23 @@
                                     <i class="zmdi zmdi-folder zmdi-hc-5x" onclick="javascript:toggleVisibility('{{patient.id}}');"></i>
                                     <!--img src="../static/management/images/dossier.png" alt="user" class="img-thumbnail img-fluid" onclick="javascript:toggleVisibility('{{patient.id}}');"/-->
                                     <div id="{{patient.id}}" style="display:none;">
-                                        <a href="{{patient.get_absolute_url3}}" style="width:100%;"><button class="btn btn-raised g-bg-cyan" style="width:100%; text-align: center;">Informations</button></a>
+                                        <a href="{{patient.get_absolute_url6}}" style="width:100%;"><button class="btn btn-raised g-bg-cyan" style="width:100%; text-align: center;">Informations</button></a>
                                     </div>
                                 </div>
                                 
+                                
                                 <div class="col-md-8 col-sm-8 m-b-0">
                                     <h5 class="m-b-0" >{{patient.department.name | upper}}</h5>
-                                   
-                                    {% if patient.has_paid == True %}
-                                    <span class="label label-success"> Paid </span>
-                                    {% else %}
-                                    <span style="width: auto; background-color: red;"> Not paid </span>
+                                    {% if patient.department == user_department%}
+                                        
+                                        {% if has_paid %}
+                                        <span class="label label-success"> Paid </span>
+                                        {% else %}
+                                        <span style="width: auto; background-color: red;"> Not paid </span>
+                                        {% endif %}
                                     {% endif %}
                                 </div>
+                                
                         </div>
                     </div>
                 </div>

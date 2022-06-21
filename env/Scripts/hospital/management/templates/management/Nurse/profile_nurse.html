@@ -1,0 +1,117 @@
+{% extends "management/serviceReceptionist/base.html" %} 
+{% load static %} 
+
+{% block body %}
+
+<section class="content profile-page" style="min-height: 700px;">
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-lg-4 col-md-12 col-sm-12">
+                <div class="header">
+                    <h4><strong>ABOUT DOCTOR</strong></h4>
+                </div>
+                <div class="card">
+                    {% if doctor.profile %}
+                    <img src="{{doctor.profile.url}}" alt="" >
+                    {% else %}
+                    <img src="/static/management/images/avatar_doctor.jpg" class="img-fluid" alt="" >   
+                    {% endif %}
+                    
+                    <div class="body">
+                        <strong>DEPARTMENT: {{doctor.department.name}}</strong>
+                        <hr>
+                        <strong>Name</strong>
+                        <p style="text-transform: uppercase;">{{doctor.first_name}} {{doctor.last_name}}</p>
+                        <hr>
+                        <strong>date of birth</strong>
+                        <p>{{doctor.date_of_birth}}</p>
+                        <hr>
+                        <strong>Gender</strong>
+                        <p>{{doctor.gender}}</p> 
+                        <hr>
+                        <strong>Marital status</strong>
+                        <p>{{doctor.marital_status}}</p>    
+                        <hr>
+                        <strong>Phone</strong>
+                        <p>{{doctor.phone}}</p>
+                        <hr>
+                        <strong>Email</strong>
+                        <p>{{doctor.email}}</p>
+                        <hr>
+                        <strong>Address</strong>
+                        <address>{{doctor.location}}</address>
+                        <hr>
+                        <strong>Description</strong>
+                        <address>{{doctor.description}}</address>
+                        <hr>
+                        <strong>Date of creation</strong>
+                        <address>{{doctor.date_creation}}</address>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="body">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item"><button class="nav-link active"data-toggle="tab" onclick=" javascript:DeleteVisibility1('appointments', 'prescriptions');">APPOINTMENTS</button></li>
+                            <li class="nav-item"><button class="nav-link"data-toggle="tab" onclick="javascript:DeleteVisibility1('prescriptions', 'appointments');">PRESCRIPTIONS</button></li>
+                        </ul>  
+                        <div id="appointments" class="table-responsive" style="display:block;">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>RECEPTIONIST</th>
+                                        <th>PATIENT</th>
+                                        <th>DATE</th>
+                                        <th>HOUR</th>
+                                        <th>STATE</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for appointment in appointments %}
+                                    <tr>
+                                        <td></td>
+                                        <td class="txt-oflo"><span style="text-transform: uppercase;">{{appointment.service_receptionist.first_name}} {{appointment.service_receptionist.last_name}}</span></td>
+                                        <td><a href="{{ appointment.patient.get_absolute_url4 }}" style="text-transform: uppercase; color: black;">{{appointment.patient.first_name}} {{appointment.patient.last_name}}</a> </td>
+                                        <td class="txt-oflo">{{appointment.date_appointment}}</td>
+                                        <td class="txt-oflo">{{appointment.hour_appointment}}</td>
+                                        {% if appointment.state == "Not consulted" %}
+                                        <td class="txt-oflo"><span style="width: auto; background-color: red;">{{appointment.state}}</span></td>
+                                        {% else %}
+                                        <td class="txt-oflo">{{appointment.state}}</td>
+                                        {% endif %}
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="prescriptions" class="table-responsive" style="display:none;">   
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th style="width: 30%;">PRESCRIPTED DATE</th>
+                                        <th style="width: 50%;">PATIENT</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for prescription in prescriptions %}
+                                    <tr>
+                                        <td></td>
+                                        <td class="txt-oflo">{{prescription.prescripted_date}}</td>
+                                        <td class="txt-oflo"><span >{{prescription.patient.first_name}} {{prescription.patient.last_name}}</span></td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        
+    </div>
+</section>
+{% endblock %}

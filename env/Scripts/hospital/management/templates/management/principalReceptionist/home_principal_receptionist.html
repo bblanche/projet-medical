@@ -18,18 +18,19 @@
             <div class="col-lg-3 col-md-6 col-sm-12">
                 <div class="card">
                     {% if department.image %}  
-                    <img style="height: 250px; width: 100%; border-radius: 7px; float: left;" src="{{department.image.url}}" class="img-fluid"  alt="Card image">
+                    <img style="height: 250px; width: 100%; border-radius: 7px; float: left;" src="{{department.image.url}}" class="img-fluid"  alt="Card image" onclick="javascript:toggleVisibility('{{department.pk}}');">
                    
                     {% else %}
-                    <span style="text-align: center;"><img src="http://via.placeholder.com/130x130" class="img-fluid" alt="" style="height: 250px; width: 100%; border-radius: 7px; float: left;"></span>  
+                    <span style="text-align: center;"><img src="http://via.placeholder.com/130x130" class="img-fluid" alt="" style="height: 250px; width: 100%; border-radius: 7px; float: left;" onclick="javascript:toggleVisibility('{{department.pk}}');"></span>  
                     {% endif %} 
                     <div class="card-body">
                         <h4 class="card-title" style="text-align: center;">{{department.name}}</h4>
                         
                     </div>
+                    <div id="{{department.pk}}" style="display:none;">
                         <a href="{{department.get_absolute_url3}}" ><button class="btn btn-raised g-bg-cyan" style="width:100%; text-align: center;" >Staff informations</button></a>  
                         <a href="{{department.get_absolute_url4}}" ><button class="btn btn-raised g-bg-cyan" style="width:100%; text-align: center;">Patient informations</button></a>
-                        
+                    </div>   
                 </div>
             </div>
             {% endfor %}

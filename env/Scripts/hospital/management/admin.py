@@ -23,8 +23,8 @@ class PatientAdmin(admin.ModelAdmin):
     search_fields = ('first_name', 'last_name', 'principal_receptionist', 'marital_status', 'location', 'profession', 'date_creation')
 
 class ParametersAdmin(admin.ModelAdmin):
-    list_display = ['blood_pressure', 'pulse', 'breathing_rate', 'heart_rate', 'weight', 'height', 'blood_sugar', 'temperature', 'department', 'service_receptionist', 'patient', 'date_creation']
-    search_fields = ('blood_pressure', 'pulse', 'breathing_rate', 'heart_rate', 'weight', 'height', 'blood_sugar', 'temperature', 'department', 'service_receptionist', 'patient' , 'date_creation')
+    list_display = ['blood_pressure', 'pulse', 'breathing_rate', 'heart_rate', 'weight', 'height', 'blood_sugar', 'temperature', 'department', 'nurse', 'patient', 'date_creation']
+    search_fields = ('blood_pressure', 'pulse', 'breathing_rate', 'heart_rate', 'weight', 'height', 'blood_sugar', 'temperature', 'department', 'nurse', 'patient' , 'date_creation')
 
 class AppointmentAdmin(admin.ModelAdmin):
     list_display = ['date_appointment', 'patient', 'service_receptionist', 'doctor', 'state', 'date_creation']

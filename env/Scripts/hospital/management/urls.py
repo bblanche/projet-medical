@@ -1,6 +1,6 @@
 from django.urls import path, include
 from django.conf.urls import url
-from .views import     add_nurse, nurse_admin, add_patient_department_principal_receptionist, patientPrincipalReceptionist, add_admin, admin_admin, add_patient_department_admin, add_patient_admin, add_motif, payment_motif_admin, department_staff_admin, patient_department_admin, patient_department_service_receptionist, patient_department_doctor, patient_department_info, patient_info, patient_admin, service_receptionist_admin, doctor_admin, cashier_admin, principalReceptionist_admin, department_info_admin, add_cashier, add_doctor, add_service_receptionist, add_principal_receptionist, homeCashier, viewPrescriptionPatient, all_department_principal_receptionist, me_cashier, me_principal_receptionist, doctor_make_appointment, me_doctor, me_service_receptionist, receptionist_profile, department_receptionist, department_add_patients_accueil, doctor_appointments, doctor_make_prescription, doctor_patients, doctor_prescriptions, patient_informations, paymentReceiptCashier, other, paymentSortedByDepartmentCashier, addPaymentPatientDepartmentCashier, departmentCashier, patientDepartmentPrincipalReceptionist, departmentPrincipalReceptionist, parametres_profile, home, doctors_profile,patients,patients_profile_accueil,schedule,appointment,department_doctors, search, department_add_department
+from .views import      modify_motif, schedule_nurse, other_nurse, patient_department_nurse, patients_nurse, add_nurse, nurse_admin, add_patient_department_principal_receptionist, patientPrincipalReceptionist, add_admin, admin_admin, add_patient_department_admin, add_patient_admin, add_motif, payment_motif_admin, department_staff_admin, patient_department_admin, patient_department_service_receptionist, patient_department_doctor, patient_department_info, patient_info, patient_admin, service_receptionist_admin, doctor_admin, cashier_admin, principalReceptionist_admin, department_info_admin, add_cashier, add_doctor, add_service_receptionist, add_principal_receptionist, homeCashier, viewPrescriptionPatient, all_department_principal_receptionist, me_cashier, me_principal_receptionist, doctor_make_appointment, me_doctor, me_service_receptionist, receptionist_profile, department_receptionist, department_add_patients_accueil, doctor_appointments, doctor_make_prescription, doctor_patients, doctor_prescriptions, patient_informations, paymentReceiptCashier, other, paymentSortedByDepartmentCashier, addPaymentPatientDepartmentCashier, departmentCashier, patientDepartmentPrincipalReceptionist, departmentPrincipalReceptionist, parametres_profile, home, doctors_profile,patients,patients_profile_accueil,schedule,appointment,department_doctors, search, department_add_department
 #department_patients,
 app_name = 'management'
 
@@ -8,7 +8,14 @@ urlpatterns = [
     
     path('', home , name="home"),
     #path('doctors/', doctors, name="doctors"), affiche tous les docteurs de l'hopital
-    
+    #****************************************ROUTES LIES A LA NURSE********************************************************#
+    path('nurse/patients/', patients_nurse, name="patients_nurse"),
+    path('nurse/patients/patient_department_nurse/<int:pk>/', patient_department_nurse, name="patient_department_nurse"),
+    path('nurse/patients/profile/other/<int:pk>/<int:pk2>/', other_nurse, name="other_profile_nurse"),
+    path('nurse/patients/profile/parameters/<int:pk>/', parametres_profile, name="parametres_profile"),#---------------------patient-------------------------------#
+    path('nurse/schedule/', schedule_nurse , name="schedule_nurse"),
+    #*********************************************************************************************************#
+
     #****************************************ROUTES LIES A L'ADMIN********************************************************#
     #---------------------DEPARTMENTS-------------------------------#
     path('admin/add_department', department_add_department, name="department_add_department_admin"), #ajouté
@@ -27,6 +34,7 @@ urlpatterns = [
     path('admin/departments/<int:pk>/staff', department_staff_admin, name="department_staff_admin"),
     path('admin/departments/<int:pk>/patients', patient_department_admin, name="patient_department_admin"),
     path('admin/departments/<int:pk>/payment_motif', payment_motif_admin, name="payment_motif_admin"),
+    path('admin/departments/<int:pk>/payment_motif/<int:pk3>/modify_motif', modify_motif, name="modify_motif"),
     path('admin/departments/<int:pk>/payment_motif/<int:pk2>/add_motif', add_motif, name="add_motif"),
     #---------------------DEPARTMENTS-------------------------------#
     
@@ -60,7 +68,7 @@ urlpatterns = [
    
    #---------------------receptionists-------------------------------#
     path('service_receptionist/receptionists/', department_receptionist, name="department_receptionist"), #ajouté
-    path('service_receptionist/receptionists/profile/<int:pk>/', receptionist_profile, name="receptionist_profile"),
+    #path('service_receptionist/receptionists/profile/<int:pk>/', receptionist_profile, name="receptionist_profile"),
     #---------------------receptionists-------------------------------#
     
     #---------------------me-------------------------------#
@@ -78,7 +86,7 @@ urlpatterns = [
     
     path('service_receptionist/patients/patient_department_service_receptionist/<int:pk>/', patient_department_service_receptionist, name="patient_department_service_receptionist"),
     path('service_receptionist/patients/profile/other/<int:pk>/<int:pk2>/', other, name="other_profile"),
-    path('service_receptionist/patients/profile/parameters/<int:pk>/', parametres_profile, name="parametres_profile"),#---------------------patient-------------------------------#
+    
     #path('doctors/add/', add_doctors, name="add_doctors"),-----------------pour l'admin
     #---------------------patient-------------------------------#
     path('home/', home , name="homeReceptionist"),

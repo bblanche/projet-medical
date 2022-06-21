@@ -19,27 +19,54 @@
             <br>
         </form>
         <div class="fa-3x">
-            <a href="{% url 'management:department_add_department_admin' %}"><i class="zmdi animated -text-light-blue zmdi-plus-circle zmdi-hc-4x"></i></a>
+            <a href="{% url 'management:department_add_department_admin' %}" title="add department"><i class="zmdi animated -text-light-blue zmdi-plus-circle zmdi-hc-4x"></i></a>
         </div>
         <br/>
-        <div class="row clearfix" >
+        <div>
+        {% if message == "Succesfully delete" %}
+        <h5 class="messagedone" style="text-align: center;">{{message}}</h5> 
+        {% else %}
+            <h5 class="txt-oflo" style="color: red; text-align: center;">{{message}}</h5>
+        {% endif %}
+        </div>
+        <div class="row clearfix">
+            
             {% for department in departments %}
             <div class="col-lg-3 col-md-6 col-sm-12">
                 <div class="card">
                     {% if department.image %}  
-                    <img style="height: 250px; width: 100%; border-radius: 7px; float: left;" src="{{department.image.url}}" class="img-fluid"  alt="Card image">
+                    <img style="height: 250px; width: 100%; border-radius: 7px; float: left;" src="{{department.image.url}}" class="img-fluid"  alt="Card image" onclick="javascript:toggleVisibility('{{department.pk}}');">
                    
                     {% else %}
-                    <span style="text-align: center;"><img src="http://via.placeholder.com/130x130" class="img-fluid" alt="" style="height: 250px; width: 100%; border-radius: 7px; float: left;"></span>  
+                    <span style="text-align: center;"><img src="http://via.placeholder.com/130x130" class="img-fluid" alt="" style="height: 250px; width: 100%; border-radius: 7px; float: left;" onclick="javascript:toggleVisibility('{{patient.id}}');"></span>  
                     {% endif %} 
                     <div class="card-body">
                         <h4 class="card-title" style="text-align: center;">{{department.name}}</h4>
-                        
+                        <div style="text-align:left;"> <a title="delete"><i class="zmdi zmdi-delete" onclick="javascript:toggleVisibility('{{department.pk}}i');"></i></a></div>
+                                            <div id="{{department.pk}}i" style="display:none;">
+                                                <form method="post" action="{% url 'management:department_info' %}">
+                                                    {% csrf_token %}
+                                                    <div class="col-sm-3"></div>
+                                                        <div class="form-group">
+                                                            <div class="form-line"> <strong>Are you sure ?</strong>
+                                                                <select name="staff" class="form-control show-tick" required>
+                                                                    <option value={{department.pk}}>YES</option>
+                                                                    <option>NO</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    
+                                                        <button type="submit" class="btn btn-raised g-bg-cyan">Valid</button> 
+                                                        
+                                                <a style="width:100%;"><span class="btn btn-raised g-bg-cyan" onclick="javascript:toggleVisibility('{{department.pk}}i');">Cancel</span></a>
+                                                </form>
+                                            </div>
                     </div>
+                    <div id="{{department.pk}}" style="display:none;">
                     <a href="{{department.get_absolute_url6}}" ><button class="btn btn-raised g-bg-cyan" style="width:100%; text-align: center;" >Payment motif</button></a>  
                         <a href="{{department.get_absolute_url7}}" ><button class="btn btn-raised g-bg-cyan" style="width:100%; text-align: center;" >Staff informations</button></a>  
                         <a href="{{department.get_absolute_url8}}" ><button class="btn btn-raised g-bg-cyan" style="width:100%; text-align: center;">Patient informations</button></a>
-                        
+                    </div>   
                 </div>
             </div>
             {% endfor %}
